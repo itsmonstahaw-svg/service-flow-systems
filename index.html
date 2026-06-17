@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Website Design & AI Marketing Systems For Contractors | Service Flow Systems</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script async src="https://js.stripe.com/v3/buy-button.js"></script>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav" id="navbar">
+    <div class="nav-inner">
+      <a href="#" class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Service Flow <span class="logo-accent">Systems</span></span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#testimonials">Results</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+      </ul>
+      <a href="#contact" class="btn btn-nav">Get Started →</a>
+      <button class="nav-toggle" id="navToggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="nav-mobile" id="navMobile">
+      <a href="#services">Services</a>
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#testimonials">Results</a>
+      <a href="#contact" class="btn btn-gold">Get Started</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero hero-split">
+    <div class="hero-bg-pattern"></div>
+    <div class="container">
+      <div class="hero-split-inner">
+
+        <!-- LEFT: Text -->
+        <div class="hero-left">
+          <div class="hero-badge">Built for Local Service Businesses</div>
+          <h1 class="hero-title">
+            Website Design &<br />
+            <span class="gradient-text">Marketing Systems</span><br />
+            For Contractors
+          </h1>
+          <p class="hero-sub">
+            We build branded websites backed by a complete marketing system — book appointments, capture leads, get paid faster, and grow your business on autopilot.
+          </p>
+          <div class="hero-cta">
+            <a href="#contact" class="btn btn-gold btn-lg">Start Growing Today →</a>
+            <a href="#features" class="btn btn-outline btn-lg">See How It Works</a>
+          </div>
+          <div class="hero-ratings">
+            <div class="rating-badge">
+              <span class="rating-logo google-logo">G</span>
+              <div class="rating-info">
+                <span class="rating-name">Google</span>
+                <span class="rating-stars">★★★★★</span>
+              </div>
+            </div>
+            <div class="rating-divider"></div>
+            <div class="rating-badge">
+              <span class="rating-logo fb-logo">f</span>
+              <div class="rating-info">
+                <span class="rating-name">Facebook</span>
+                <span class="rating-stars">★★★★★</span>
+              </div>
+            </div>
+            <div class="rating-divider"></div>
+            <div class="rating-badge">
+              <span class="rating-logo tp-logo">★</span>
+              <div class="rating-info">
+                <span class="rating-name">Trustpilot</span>
+                <span class="rating-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Dashboard Image -->
+        <div class="hero-right">
+          <img src="images/dashboard-hero.png" alt="Service Flow Systems Dashboard" class="hero-dashboard-img" />
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR WORK -->
+  <section class="our-work" id="our-work">
+    <div class="container">
+      <h2 class="our-work-title">SEE OUR WORK</h2>
+      <div class="work-grid">
+
+        <div class="work-card" data-animate>
+          <a href="https://nycheartsoflovepetcare.com/" target="_blank" rel="noopener" class="work-img-link">
+            <img src="images/my_work/work-nyc.png" alt="NYC Hearts of Love Pet Care website" class="work-img" />
+          </a>
+          <p class="work-card-label">Click the link to view a website we've designed: <a href="https://nycheartsoflovepetcare.com/" target="_blank" rel="noopener">nycheartsoflovepetcare.com</a></p>
+          <strong class="work-card-name">NYC Hearts of Love Pet Care</strong>
+        </div>
+
+        <div class="work-card" data-animate>
+          <a href="https://blackmouthboutique.com/" target="_blank" rel="noopener" class="work-img-link">
+            <img src="images/my_work/work-blackmouth.png" alt="Blackmouth Boutique website" class="work-img" />
+          </a>
+          <p class="work-card-label">Click the link to view a website we've designed: <a href="https://blackmouthboutique.com/" target="_blank" rel="noopener">blackmouthboutique.com</a></p>
+          <strong class="work-card-name">Blackmouth Boutique</strong>
+        </div>
+
+        <div class="work-card" data-animate>
+          <a href="https://trirefrigerationhvac.com/" target="_blank" rel="noopener" class="work-img-link">
+            <img src="images/my_work/work-tri.png" alt="Tri Refrigeration & HVAC website" class="work-img" />
+          </a>
+          <p class="work-card-label">Click the link to view a website we've designed: <a href="https://trirefrigerationhvac.com/" target="_blank" rel="noopener">trirefrigerationhvac.com</a></p>
+          <strong class="work-card-name">Tri Refrigeration & HVAC</strong>
+        </div>
+
+      </div>
+      <div class="work-cta">
+        <a href="portfolio.html" class="btn btn-outline btn-lg">View All Our Work →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES INTRO -->
+  <section class="features-intro">
+    <div class="container">
+      <div class="section-label">Simple Systems</div>
+      <h2 class="section-title">Simple Systems You Need to<br /><span class="gradient-text">Grow in One Place</span></h2>
+    </div>
+  </section>
+
+  <!-- FEATURE 1 — Functional Website -->
+  <section class="feature-section" id="features">
+    <div class="container">
+      <div class="feature-row">
+        <div class="feature-text" data-animate>
+          <div class="section-label">Your Online Foundation</div>
+          <h2>Functional<br /><span class="gradient-text">Website</span></h2>
+          <p>Get a website that instantly turns leads into text conversations that go <strong>directly to your phone.</strong></p>
+          <ul class="feature-list">
+            <li>✓ Actually Get Found Online<br /><span class="feature-sub">If a customer Googles your business and can't find you, that might be awkward... Don't worry, we won't let that happen.</span></li>
+            <li>✓ Showcase Your Best Reviews<br /><span class="feature-sub">We all have one or two bad reviews... That doesn't mean your customers need to see them.</span></li>
+            <li>✓ Mobile Friendly<br /><span class="feature-sub">87% of people visit websites on their phone. We'll make sure your business looks extra sexy on mobile.</span></li>
+            <li>✓ Optimized For Local Google Searches<br /><span class="feature-sub">This should go without saying but we'll still say it. We make sure your business is found on Google.</span></li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Get My Website →</a>
+        </div>
+        <div class="feature-visual" data-animate>
+          <img src="images/gifs/FUNCTIONAL_WEBSITE.706f2bd1.gif" alt="Functional Website Preview" class="feature-gif" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 2 — Reviews -->
+  <section class="feature-section feature-alt">
+    <div class="container">
+      <div class="feature-row feature-row-reverse">
+        <div class="feature-text" data-animate>
+          <div class="section-label">Build Your Reputation</div>
+          <h2>5-Star Magic<br /><span class="gradient-text">Review Funnel</span></h2>
+          <p>"Sure I'll leave you a review", but the truth is people forget. We'll 'gently' remind them for a few weeks until they remember.</p>
+          <ul class="feature-list">
+            <li>✓ 5-Star Reviews Only<br /><span class="feature-sub">You can't make everyone happy, but our magic funnel sure can. Five stars, every time.</span></li>
+            <li>✓ Automatic Follow-Up Reminders<br /><span class="feature-sub">"Sure I'll leave you a review", but the truth is people forget. We'll 'gently' remind them for a few weeks until they remember.</span></li>
+            <li>✓ Ask For Reviews In One Click<br /><span class="feature-sub">As promised, we keep it simple. If you're confused, we're fired and extremely embarrassed.</span></li>
+            <li>✓ Stop Worrying About Bad Reviews<br /><span class="feature-sub">Unsure if you should ask for a review? We'll take the guesswork out by guiding your customer to leave a 5-star review!</span></li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Start Getting Reviews →</a>
+        </div>
+        <div class="feature-visual" data-animate>
+          <img src="images/gifs/5_STAR_FUNNEL.9fc0232d.webp" alt="5-Star Reviews Funnel" class="feature-gif" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 3 — Missed Call -->
+  <section class="feature-section">
+    <div class="container">
+      <div class="feature-row">
+        <div class="feature-text" data-animate>
+          <div class="section-label">Never Lose a Lead</div>
+          <h2>Missed Call<br /><span class="gradient-text">Text Back</span></h2>
+          <p>Everyone misses calls, but not everyone texts back. Be the one who does. Outshine your competition.</p>
+          <ul class="feature-list">
+            <li>✓ Stand Out From Your Competition<br /><span class="feature-sub">Everyone misses calls, but not everyone texts back. Be the one who does and outshine your competition.</span></li>
+            <li>✓ No More Lost Leads<br /><span class="feature-sub">On a job site and can't answer the phone? No problem, we'll fire off a text and start the conversation for you.</span></li>
+            <li>✓ Show Customers You Care<br /><span class="feature-sub">Your ex didn't like it when you missed their calls — neither do your customers. At least send a text so they know you care.</span></li>
+            <li>✓ Be Available 24/7<br /><span class="feature-sub">Missed a call after hours? No worries, we'll make sure everyone feels loved even while you're getting your beauty sleep.</span></li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Set This Up →</a>
+        </div>
+        <div class="feature-visual" data-animate>
+          <img src="images/gifs/MISSED_CALL_TEXT_BACK.b52be136.gif" alt="Missed Call Text Back" class="feature-gif" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 4 — One-Click Marketing -->
+  <section class="feature-section feature-alt">
+    <div class="container">
+      <div class="feature-row feature-row-reverse">
+        <div class="feature-text" data-animate>
+          <div class="section-label">Reach Your Customers</div>
+          <h2>One-Click<br /><span class="gradient-text">Marketing Campaigns</span></h2>
+          <p>You know it, and we know it… Referrals and repeat customers are the best. Let's get you both!</p>
+          <ul class="feature-list">
+            <li>✓ Done For You<br /><span class="feature-sub">Again... let's keep it simple. Activate our pre-built marketing campaigns with just one click.</span></li>
+            <li>✓ Referral Campaigns<br /><span class="feature-sub">We know it and you know it... You do good work, and your customers love you. Let's remind them to tell their friends.</span></li>
+            <li>✓ Return Customer Campaigns<br /><span class="feature-sub">Having loyal customers is key to a successful business. We'll make sure your customers feel cared for with special offers.</span></li>
+            <li>✓ Marketing Campaigns At Your Fingertips<br /><span class="feature-sub">Just click a button and we'll take care of the rest. No need to hire a marketing team.</span></li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Start Sending →</a>
+        </div>
+        <div class="feature-visual" data-animate>
+          <img src="images/gifs/ONE_CLICK_MARKETING_CAMPAIGNS.96473ef3.gif" alt="One-Click Marketing Campaigns" class="feature-gif" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE 5 — Local SEO -->
+  <section class="feature-section">
+    <div class="container">
+      <div class="feature-row">
+        <div class="feature-text" data-animate>
+          <div class="section-label">Get Found Online</div>
+          <h2>Local<br /><span class="gradient-text">SEO</span></h2>
+          <p>"Rank number one on Google in a week!" Just kidding, SEO takes time...</p>
+          <ul class="feature-list">
+            <li>✓ Qualified Leads<br /><span class="feature-sub">Sounds better than paying $50 for a lead that doesn't even pick up the phone, right?</span></li>
+            <li>✓ Stop Paying For Unqualified Leads<br /><span class="feature-sub">Like mom always said, quality over quantity. Do we agree with her on this? Yes.</span></li>
+            <li>✓ Organic Acquisition System<br /><span class="feature-sub">Create your own qualified leads instead of paying for tire-kickers.</span></li>
+          </ul>
+          <a href="#contact" class="btn btn-gold">Rank Higher →</a>
+        </div>
+        <div class="feature-visual" data-animate>
+          <img src="images/gifs/LOCAL_SEO.c8228924.webp" alt="Local SEO" class="feature-gif" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRADES SECTION -->
+  <section class="trades-section" id="how-it-works">
+    <div class="trades-wave-top"></div>
+    <div class="container">
+      <h2 class="trades-title">Serving All These Trades<br/><span>and More...</span></h2>
+      <div class="trades-slider-wrap">
+        <button class="trades-arrow trades-prev" id="tradesPrev">‹</button>
+        <div class="trades-track-outer">
+          <div class="trades-track" id="tradesTrack">
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1518736346281-76873166a64a?w=400&h=300&q=80&fit=crop" alt="Roofing" /><span>Roofing</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1601993198415-19d86ae28424?w=400&h=300&q=80&fit=crop" alt="HVAC" /><span>HVAC</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1621905251918-48416bd8575a?w=400&h=300&q=80&fit=crop" alt="Plumbing" /><span>Plumbing</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=400&h=300&q=80&fit=crop" alt="Electricians" /><span>Electricians</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1556912173-46c336c7fd55?w=400&h=300&q=80&fit=crop" alt="Remodeling" /><span>Remodeling</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1525909002-1b05e0c869d8?w=400&h=300&q=80&fit=crop" alt="Painters" /><span>Painters</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1558904541-efa843a96f01?w=400&h=300&q=80&fit=crop" alt="Landscapers" /><span>Landscapers</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1528846596754-23db743ea0e2?w=400&h=300&q=80&fit=crop" alt="Dog Grooming" /><span>Dog Grooming</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1503256207526-0d5d80fa2f47?w=400&h=300&q=80&fit=crop" alt="Dog Training" /><span>Dog Training</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&q=80&fit=crop" alt="Cleaners" /><span>Cleaners</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=400&h=300&q=80&fit=crop" alt="Home Builders" /><span>Home Builders</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1617143520628-86934f404d06?w=400&h=300&q=80&fit=crop" alt="Tree Service" /><span>Tree Service</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1601467995997-ac1ae9a8fff4?w=400&h=300&q=80&fit=crop" alt="Moving Companies" /><span>Moving Companies</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1518709414768-a88981a4515d?w=400&h=300&q=80&fit=crop" alt="Handyman" /><span>Handyman</span></div>
+            <div class="trade-card"><img src="https://images.unsplash.com/photo-1522195491553-dbda973beac4?w=400&h=300&q=80&fit=crop" alt="Window & Door" /><span>Window & Door</span></div>
+          </div>
+        </div>
+        <button class="trades-arrow trades-next" id="tradesNext">›</button>
+      </div>
+      <div class="trades-cta">
+        <a href="#contact" class="btn btn-gold btn-lg">See All Trades We Work With →</a>
+      </div>
+    </div>
+    <div class="trades-wave-bot"></div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-it-works" id="process">
+    <div class="container">
+      <h2 class="section-title" style="color:white;">What Working With Us<br /><span class="gradient-text">Looks Like...</span></h2>
+      <div class="process-steps">
+
+        <div class="process-step" data-animate>
+          <div class="process-line"></div>
+          <div class="process-icon">1</div>
+          <div class="process-content">
+            <h3>Demo Call <span class="process-duration">(20 mins)</span></h3>
+            <p>It's actually a sales call, we just didn't want to scare you. But seriously — we'll answer all your questions, show you any features you're curious about, and show you live client accounts & results.</p>
+          </div>
+        </div>
+
+        <div class="process-step" data-animate>
+          <div class="process-line"></div>
+          <div class="process-icon">2</div>
+          <div class="process-content">
+            <h3>We Build Your System <span class="process-duration">(7–10 days)</span></h3>
+            <p>Fill out a basic onboarding form with your business details. After we have the correct information, we'll get to work building your new website & marketing system.</p>
+          </div>
+        </div>
+
+        <div class="process-step" data-animate>
+          <div class="process-icon">3</div>
+          <div class="process-content">
+            <h3>Launch Call <span class="process-duration">(25 mins)</span></h3>
+            <p>We'll walk you through your new website & marketing system, answer any questions, and show you how "everything" works. And by everything, we're really just talking about pressing two buttons.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials" id="testimonials">
+    <div class="container">
+      <h2 class="section-title why-unique-title">Why we're "<span class="gradient-text">totally unique</span>"...<br />just like everyone else, right?</h2>
+      <div class="why-unique-grid">
+
+        <div class="why-card" data-animate>
+          <div class="why-icon">
+            <img src="images/totally%20unique/simple_to_use.webp" alt="Simple To Use" class="why-icon-img" />
+          </div>
+          <h3>Simple To Use</h3>
+          <p>We built Service Flow Systems with the core concept of being simple to use, so everything is made to be exactly that.</p>
+        </div>
+
+        <div class="why-card" data-animate>
+          <div class="why-icon">
+            <img src="images/totally%20unique/affordable.webp" alt="Affordable" class="why-icon-img" />
+          </div>
+          <h3>Affordable</h3>
+          <p>Our prices are designed to keep you for 10 years, not 10 weeks. We're in it for the long haul.</p>
+        </div>
+
+        <div class="why-card" data-animate>
+          <div class="why-icon">
+            <img src="images/totally%20unique/no_contracts.webp" alt="No Contracts" class="why-icon-img" />
+          </div>
+          <h3>No Contracts</h3>
+          <p>If it's affordable & awesome, why would we need a contract... if you're happy, you'll stay.</p>
+        </div>
+
+        <div class="why-card" data-animate>
+          <div class="why-icon">
+            <img src="images/totally%20unique/no_bs.svg" alt="No Bullsh*t" class="why-icon-img" />
+          </div>
+          <h3>No Bullsh*t</h3>
+          <p>We don't believe in the fluff, we just tell you exactly what we're going to do and we do it. Period.</p>
+        </div>
+
+        <div class="why-card" data-animate>
+          <div class="why-icon">
+            <img src="images/totally%20unique/we_have_proof.svg" alt="We Have Proof" class="why-icon-img" />
+          </div>
+          <h3>We Have Proof</h3>
+          <p>We already know what's working and have all the reviews & results to back it up.</p>
+        </div>
+
+        <div class="why-card" data-animate>
+          <div class="why-icon">
+            <img src="images/totally%20unique/constant_improvements.webp" alt="Constant Improvements" class="why-icon-img" />
+          </div>
+          <h3>Constant Improvements</h3>
+          <p>We regularly make improvements and updates to our systems to make sure you get the best value for your money.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- LEGIT / PARTNERS BANNER -->
+  <section class="legit-banner">
+    <div class="container">
+      <h2 class="legit-title">Just so you know we're legit,<br /><span>we partner with...</span></h2>
+    </div>
+    <div class="legit-track-wrap">
+      <div class="legit-track" id="legitTrack">
+        <div class="legit-logo"><img src="images/legit/localfalcon.webp" alt="LocalFalcon" /></div>
+        <div class="legit-logo"><img src="images/legit/meta.webp" alt="Meta" /></div>
+        <div class="legit-logo legit-logo--lg"><img src="images/legit/godaddy.webp" alt="GoDaddy" /></div>
+        <div class="legit-logo legit-logo--lg"><img src="images/legit/openai.webp" alt="OpenAI" /></div>
+        <div class="legit-logo"><img src="images/legit/googlebusinessprofile.webp" alt="Google Business Profile" /></div>
+        <div class="legit-logo legit-logo--lg"><img src="images/legit/googleads.webp" alt="Google Ads" /></div>
+        <div class="legit-logo"><img src="images/legit/googleanalyics.webp" alt="Google Analytics" /></div>
+        <div class="legit-logo"><img src="images/legit/googlesearchconsole.webp" alt="Google Search Console" /></div>
+        <div class="legit-logo"><img src="images/legit/leadconnector.webp" alt="LeadConnector" /></div>
+        <div class="legit-logo"><img src="images/legit/mailgun.webp" alt="Mailgun" /></div>
+        <div class="legit-logo"><img src="images/legit/ahrefs.webp" alt="Ahrefs" /></div>
+        <div class="legit-logo"><img src="images/legit/semrush.webp" alt="SEMRush" /></div>
+        <div class="legit-logo"><img src="images/legit/canva.webp" alt="Canva" /></div>
+        <div class="legit-logo legit-logo--lg"><img src="images/legit/twillio.webp" alt="Twilio" /></div>
+        <div class="legit-logo"><img src="images/legit/zapier.webp" alt="Zapier" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="faq-section">
+    <div class="container">
+      <h2 class="section-title" style="text-align:center;margin-bottom:48px;">Frequently Asked Questions</h2>
+      <div class="faq-list">
+
+        <div class="faq-item">
+          <button class="faq-q faq-q--active" aria-expanded="false">
+            When am I going to start seeing results?
+            <span class="faq-chevron">&#8964;</span>
+          </button>
+          <div class="faq-a">
+            <p>This will completely depend on what else you're doing for advertising, how long you've been in business, the quality of your work, and of course that you commit to using our system. If you think you're going to close your eyes and pay us $97/month to solve all your problems, we're probably not the right fit for you. We cannot stress this enough... you have to be doing multiple forms of advertising. Service Flow Systems is meant to provide you a simple, yet extremely effective foundational marketing system to help grow and expand your business. We're here to build your online business foundation, not perform miracles.</p>
+            <p style="margin-top:14px;font-weight:700;color:var(--black);">"Explain how you help me grow my business"</p>
+            <p style="margin-top:28px;margin-bottom:28px;font-weight:700;color:var(--black);"><strong>Sure...</strong></p>
+            <ol style="margin:0 0 0 18px;display:flex;flex-direction:column;gap:8px;">
+              <li><strong>Do you believe having more 5 star reviews will attract more customers?</strong></li>
+              <li><strong>Do you believe that being able to be found online and having a professional website that actually works will help you convert more leads into paying customers?</strong></li>
+              <li><strong>Do you believe that instantly following up with incoming leads will make you look more professional, therefore leading to more business?</strong></li>
+              <li><strong>Do you believe making sure you're making the most of every customer you work with by putting them into automated re-marketing campaigns will make them more likely to work with you again?</strong></li>
+              <li><strong>Do you believe offering discounts for friends of your past customers will increase the number of referrals you get?</strong></li>
+              <li><strong>Do you believe using automation and AI could free you from repeating the same basic tasks in your business, therefore giving you more time for other things?</strong></li>
+              <li><strong>Do you believe having these systems in place is important to grow your business?</strong></li>
+            </ol>
+            <p style="margin-top:14px;font-weight:600;color:var(--black);">If you believe any of those things can grow your business, that's exactly what we can help you with.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Why is your pricing so cheap?
+            <span class="faq-chevron">&#8964;</span>
+          </button>
+          <div class="faq-a">
+            <p>Our only interest is keeping you for 10+ years. We believe the best way to do that is to be priced affordably. We believe if we don't overcharge and provide you with excellent service, you'll never have a reason to leave.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            What happens if I decide to cancel my membership with Service Flow Systems?
+            <span class="faq-chevron">&#8964;</span>
+          </button>
+          <div class="faq-a">
+            <p>We'll be extremely sad to see you go, but after a good cry we'll bounce back. However, you will lose access to all the features we set up for you.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Can people find my website on Google?
+            <span class="faq-chevron">&#8964;</span>
+          </button>
+          <div class="faq-a">
+            <p>We make sure every Service Flow Systems website is set up for Google with the best SEO practices. This includes keyword research, adding alt tags, meta tags, and header titles, securing an SSL certificate, optimizing for a high Google Speed test score, and providing regular updates. Your Google ranking will depend on how long your site's been live, local competition, and factors like your Google My Business reviews. We also offer blogging to boost your content. While we don't handle off-page backlinks beyond your social media, our ongoing updates keep your site in great shape — unlike some developers who set up your site and then forget about it.</p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-q" aria-expanded="false">
+            Why should I spend on a website when word of mouth is already pulling in business?
+            <span class="faq-chevron">&#8964;</span>
+          </button>
+          <div class="faq-a">
+            <p>We might be a bit biased, but here's the deal: if each of your customers brings in about $500 a year, getting just 2–4 new customers from your website will pay off. We know you'll see great value from your site. It will help you attract new customers, make it easier for existing customers to refer you, allow you to run ads if you want, and attract bigger clients who value professionalism.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- SCHEDULE CTA -->
+  <section class="schedule-cta">
+    <div class="schedule-cta-inner">
+      <div class="schedule-cta-left">
+        <h2 class="schedule-cta-title">Want to schedule a time<br />to talk?</h2>
+        <p class="schedule-cta-sub">See everything we do to help you grow your business so you can implement it yourself or let us do it for you.</p>
+        <a href="#contact" class="btn schedule-cta-btn">Book A Call</a>
+      </div>
+      <div class="schedule-cta-logo">
+        <img src="images/logo.png" alt="Service Flow Systems" class="schedule-logo-img" />
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="testimonials-section">
+    <div class="container">
+      <h2 class="section-title testimonials-title">The proof is in the pudding...<br /><span>Let's see what our clients have to say</span></h2>
+
+      <div class="testi-carousel-wrap">
+        <button class="testi-arrow testi-prev" id="testiPrev">&#8249;</button>
+
+        <div class="testi-viewport">
+          <div class="testi-track" id="testiTrack">
+
+            <!-- T1 -->
+            <div class="testi-card">
+              <video class="testi-video" controls preload="none">
+                <source src="images/testimonials/t1.mp4" type="video/mp4" />
+              </video>
+              <div class="testi-content">
+                <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="testi-quote">"Ever since he implemented the new website and landing pages, it's been nothing but great and our conversion has gone way up. We started getting calls almost immediately."</p>
+                <p class="testi-name">— Manny</p>
+                <a href="#" class="testi-see-all">See All →</a>
+              </div>
+            </div>
+
+            <!-- T2 -->
+            <div class="testi-card">
+              <video class="testi-video" controls preload="none">
+                <source src="images/testimonials/T2.mp4" type="video/mp4" />
+              </video>
+              <div class="testi-content">
+                <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="testi-quote">"First I thought it was a scam, but then it turns out they're just a really good company at a really good price. I would recommend them to anyone!"</p>
+                <p class="testi-name">— Matt</p>
+                <a href="#" class="testi-see-all">See All →</a>
+              </div>
+            </div>
+
+            <!-- T3 -->
+            <div class="testi-card">
+              <video class="testi-video" controls preload="none">
+                <source src="images/testimonials/t3.mp4" type="video/mp4" />
+              </video>
+              <div class="testi-content">
+                <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="testi-quote">"I would highly recommend going with Service Flow Systems, my business has ramped up, literally overnight and their prices are very affordable. Feel free to reach out to me personally with any questions about them!"</p>
+                <p class="testi-name">— Chris</p>
+                <a href="#" class="testi-see-all">See All →</a>
+              </div>
+            </div>
+
+            <!-- T4 -->
+            <div class="testi-card">
+              <video class="testi-video" controls preload="none">
+                <source src="images/testimonials/T4.mp4" type="video/mp4" />
+              </video>
+              <div class="testi-content">
+                <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="testi-quote">"They took our website from basic to very high end, and made getting 5 star Google reviews easy with their 5 star Google review funnel! I can't say anymore good things about these guys, thank you!"</p>
+                <p class="testi-name">— Ben</p>
+                <a href="#" class="testi-see-all">See All →</a>
+              </div>
+            </div>
+
+            <!-- T5 -->
+            <div class="testi-card">
+              <video class="testi-video" controls preload="none">
+                <source src="images/testimonials/T5.mp4" type="video/mp4" />
+              </video>
+              <div class="testi-content">
+                <div class="testi-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+                <p class="testi-quote">"I was impressed and shocked by what he included while only charging me so little. He's gone above and beyond, and I would highly recommend him!"</p>
+                <p class="testi-name">— Tommy</p>
+                <a href="#" class="testi-see-all">See All →</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <button class="testi-arrow testi-next" id="testiNext">&#8250;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="container">
+      <div class="contact-inner">
+        <div class="contact-text" data-animate>
+          <div class="section-label">Let's Talk</div>
+          <h2>Get Your Free<br /><span class="gradient-text">Growth Strategy Call</span></h2>
+          <p>On this call we are going to go over the website and systems, and answer all your questions!</p>
+          <div class="contact-perks">
+            <div class="perk">✓ Free 20-minute strategy session</div>
+            <div class="perk">✓ No contracts, no commitment</div>
+            <div class="perk">✓ Live in 48 hours or less</div>
+            <div class="perk">✓ Dedicated support team</div>
+          </div>
+        </div>
+        <div class="contact-calendar" data-animate>
+          <iframe src="https://api.leadconnectorhq.com/widget/booking/FZ4AHH9lDY0ECarSHNT6" style="width:100%;border:none;overflow:hidden;min-height:700px;" scrolling="no" id="FZ4AHH9lDY0ECarSHNT6_1781543820699"></iframe>
+          <script src="https://link.msgsndr.com/js/form_embed.js" type="text/javascript"></script>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section class="pricing-section" id="pricing">
+    <div class="container">
+      <div style="text-align:center; margin-bottom: 12px;">
+        <span class="section-label">PRICING</span>
+      </div>
+      <h2 class="section-title pricing-heading">Our Pricing</h2>
+
+      <!-- Billing toggle -->
+      <div class="pricing-toggle-wrap">
+        <span class="pricing-toggle-label">Monthly</span>
+        <button class="pricing-toggle" id="pricingToggle" aria-pressed="false">
+          <span class="pricing-toggle-knob"></span>
+        </button>
+        <span class="pricing-toggle-label">Annually <span class="pricing-save-badge">Save 25%</span></span>
+      </div>
+
+      <div class="pricing-single-wrap">
+        <div class="pricing-card pricing-card--featured">
+          <div class="pricing-badge">Most Popular</div>
+          <div class="pricing-plan">Contractor Advanced</div>
+          <div class="pricing-price">
+            <span class="pricing-amount" id="pricingAmount">$97</span>
+            <span class="pricing-per" id="pricingPer">/mo</span>
+          </div>
+          <p class="pricing-bonus" id="pricingBonus"></p>
+          <ul class="pricing-features">
+            <li>Functional Website (10-20 pages)</li>
+            <li>Automated Lead Follow Up</li>
+            <li>Missed Call Text Back</li>
+            <li>5-Star Magic Review Funnel</li>
+            <li>One-Click Marketing Campaigns</li>
+            <li>On-Site SEO</li>
+          </ul>
+          <div id="stripeMonthly">
+            <stripe-buy-button
+              buy-button-id="buy_btn_1TPRrwHJ0MgkcNOZ7cnyf6Ke"
+              publishable-key="pk_live_51TO0vjHJ0MgkcNOZOcXIk9weKq82GXVHi0YW5lxgJhQ7qRftkZhG9XeSHVJ4h3bOZYg7YheHcqaFLZVBJQj9inJI00irm0ukYx"
+            ></stripe-buy-button>
+          </div>
+          <div id="stripeAnnual" style="display:none;">
+            <stripe-buy-button
+              buy-button-id="buy_btn_1Tit7yHJ0MgkcNOZ5SjedgTO"
+              publishable-key="pk_live_51TO0vjHJ0MgkcNOZOcXIk9weKq82GXVHi0YW5lxgJhQ7qRftkZhG9XeSHVJ4h3bOZYg7YheHcqaFLZVBJQj9inJI00irm0ukYx"
+            ></stripe-buy-button>
+          </div>
+        </div>
+
+        <!-- Feature accordion card -->
+        <div class="pricing-accordion-card">
+          <div class="pricing-accordion-header">Contractor Advanced</div>
+          <div class="pricing-accordion-list">
+
+            <div class="pacc-item">
+              <button class="pacc-btn" aria-expanded="false">
+                <span>Functional Website (10-20 pages)</span>
+                <svg class="pacc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pacc-body">A professional, mobile-friendly website built around your business and services.</div>
+            </div>
+
+            <div class="pacc-item">
+              <button class="pacc-btn" aria-expanded="false">
+                <span>Automated Lead Follow Up</span>
+                <svg class="pacc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pacc-body">Every quote form and chat message gets an instant automated reply so leads know you've received it.</div>
+            </div>
+
+            <div class="pacc-item">
+              <button class="pacc-btn" aria-expanded="false">
+                <span>Missed Call Text Back</span>
+                <svg class="pacc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pacc-body">Never lose a lead again. When you miss a call, we instantly text the customer back so they don't call your competitor.</div>
+            </div>
+
+            <div class="pacc-item">
+              <button class="pacc-btn" aria-expanded="false">
+                <span>5-Star Magic Review Funnel</span>
+                <svg class="pacc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pacc-body">Automatically prompts happy customers to leave Google reviews, sent straight to Google.</div>
+            </div>
+
+            <div class="pacc-item">
+              <button class="pacc-btn" aria-expanded="false">
+                <span>One-Click Marketing Campaigns</span>
+                <svg class="pacc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pacc-body">One click triggers your 5-star review funnel plus a year-long referral and return-customer offer sequence.</div>
+            </div>
+
+            <div class="pacc-item">
+              <button class="pacc-btn" aria-expanded="false">
+                <span>On-Site SEO</span>
+                <svg class="pacc-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              <div class="pacc-body">Your site is optimized to rank locally so customers find you on Google search.</div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Stripe embed placeholder -->
+      <div class="pricing-stripe-wrap" id="stripeEmbed">
+        <!-- Paste Stripe embed code here -->
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <!-- Top bar -->
+    <div class="footer-topbar">
+      <div class="container footer-topbar-inner">
+        <a href="#" class="logo">
+          <img src="images/logo.png" alt="Service Flow Systems" class="footer-logo-img">
+        </a>
+        <div class="footer-topbar-cta">
+          <span class="footer-topbar-text">Ready to get started?</span>
+          <a href="#contact" class="btn footer-cta-btn">Book A Call</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main section -->
+    <div class="footer-main">
+      <div class="container footer-main-inner">
+        <!-- Left blurb -->
+        <div class="footer-blurb">
+          <p class="footer-blurb-text">Want to learn more about<br>how we can help?</p>
+          <a href="#contact" class="btn footer-cta-btn">Book A Call</a>
+        </div>
+
+        <!-- Link columns -->
+        <div class="footer-links">
+          <div class="footer-col">
+            <h4>Links</h4>
+            <a href="#pricing">Pricing</a>
+            <a href="#testimonials">Testimonials</a>
+            <a href="#work">Our Work</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="footer-col">
+            <h4>About</h4>
+            <a href="#process">Our Process</a>
+            <a href="#trades">Trades We Serve</a>
+            <a href="#legit">Partners</a>
+            <a href="#contact">Book a Call</a>
+          </div>
+          <div class="footer-col">
+            <h4>Services</h4>
+            <a href="#services">Functional Website</a>
+            <a href="#services">Missed Call Text Back</a>
+            <a href="#services">5-Star Review Funnel</a>
+            <a href="#services">Automated Lead Follow Up</a>
+            <a href="#services">One-Click Campaigns</a>
+            <a href="#services">On-Site SEO</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <div class="container footer-bottom-inner">
+        <a href="#">Terms &amp; Conditions</a>
+        <a href="#">Privacy Policy</a>
+        <span>© 2025 Service Flow Systems LLC. All rights reserved.</span>
+        <div class="footer-social">
+          <a href="#" class="footer-social-link" aria-label="Facebook">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+          <a href="#" class="footer-social-link" aria-label="Instagram">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

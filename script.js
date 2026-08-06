@@ -254,75 +254,6 @@ document.querySelectorAll('.faq-q').forEach(btn => {
   moveTo(0, false);
 })();
 
-// Testimonials carousel (supports multiple instances on the page)
-function initTestimonialCarousel(trackId, prevId, nextId) {
-  const track = document.getElementById(trackId);
-  const prevBtn = document.getElementById(prevId);
-  const nextBtn = document.getElementById(nextId);
-  if (!track || !prevBtn || !nextBtn) return;
-
-  const cards = Array.from(track.querySelectorAll('.testi-card'));
-  let current = 0;
-  let animating = false;
-
-  function visible() { return window.innerWidth < 900 ? 1 : 2; }
-  function max() { return cards.length - visible(); }
-  function cardW() {
-    const gap = 24;
-    return (track.parentElement.offsetWidth - gap * (visible() - 1)) / visible() + gap;
-  }
-  function moveTo(idx, animate) {
-    track.style.transition = animate ? 'transform 0.4s ease' : 'none';
-    track.style.transform = `translateX(${-idx * cardW()}px)`;
-  }
-
-  nextBtn.addEventListener('click', () => {
-    if (animating) return;
-    animating = true;
-    current = current >= max() ? 0 : current + 1;
-    moveTo(current, true);
-    setTimeout(() => animating = false, 420);
-  });
-
-  prevBtn.addEventListener('click', () => {
-    if (animating) return;
-    animating = true;
-    current = current <= 0 ? max() : current - 1;
-    moveTo(current, true);
-    setTimeout(() => animating = false, 420);
-  });
-
-  window.addEventListener('resize', () => {
-    if (current > max()) current = max();
-    moveTo(current, false);
-  });
-
-  // Capture first frame of each video as poster
-  cards.forEach(card => {
-    const video = card.querySelector('video');
-    if (!video) return;
-    video.addEventListener('loadeddata', function onLoad() {
-      video.removeEventListener('loadeddata', onLoad);
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth || 320;
-      canvas.height = video.videoHeight || 240;
-      video.currentTime = 0.1;
-      video.addEventListener('seeked', function onSeeked() {
-        video.removeEventListener('seeked', onSeeked);
-        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-        video.poster = canvas.toDataURL('image/jpeg', 0.8);
-        video.currentTime = 0;
-      }, { once: true });
-    }, { once: true });
-    video.preload = 'auto';
-  });
-
-  moveTo(0, false);
-}
-
-initTestimonialCarousel('testiTrack', 'testiPrev', 'testiNext');
-initTestimonialCarousel('heroTestiTrack', 'heroTestiPrev', 'heroTestiNext');
-
 // Pricing feature accordion
 document.querySelectorAll('.pacc-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -366,34 +297,6 @@ document.querySelectorAll('.pacc-btn').forEach(btn => {
       stripeMonthly.style.display = 'block';
       stripeAnnual.style.display = 'none';
     }
-  });
-})();
-
-// Hero VSL: muted autoplay loop acts as an animated thumbnail; click switches to full playback with sound + controls
-(function () {
-  const video = document.getElementById('heroVsl');
-  const playBtn = document.getElementById('heroVideoPlayBtn');
-  const volumeBtn = document.getElementById('heroVideoVolumeBtn');
-  if (!video || !playBtn) return;
-
-  const unmuteAndPlay = () => {
-    video.muted = false;
-    video.loop = false;
-    video.controls = true;
-    video.currentTime = 0;
-    video.play();
-    playBtn.classList.add('is-hidden');
-    if (volumeBtn) volumeBtn.classList.add('is-hidden');
-  };
-
-  playBtn.addEventListener('click', unmuteAndPlay);
-  if (volumeBtn) volumeBtn.addEventListener('click', unmuteAndPlay);
-
-  video.addEventListener('pause', () => {
-    if (!video.muted) playBtn.classList.remove('is-hidden');
-  });
-  video.addEventListener('play', () => {
-    if (!video.muted) playBtn.classList.add('is-hidden');
   });
 })();
 

@@ -301,10 +301,72 @@ document.querySelectorAll('.pacc-btn').forEach(btn => {
 })();
 
 // Form submission
-document.getElementById('contactForm').addEventListener('submit', (e) => {
+document.getElementById('contactForm')?.addEventListener('submit', (e) => {
   e.preventDefault();
   const btn = e.target.querySelector('button[type="submit"]');
   btn.textContent = '✓ Request Received! We\'ll be in touch within 24 hours.';
   btn.style.background = 'linear-gradient(135deg, #2d7a3a, #3a9b4a)';
   btn.disabled = true;
 });
+
+// Simple Systems: drop each system pill into the box, one after another, while the section is on screen
+(function () {
+  const stage = document.getElementById('sysStage');
+  if (!stage) return;
+  const pills = Array.from(stage.querySelectorAll('.sys-pill'));
+  if (!pills.length || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  let i = 0;
+  let timer = null;
+
+  function drop() {
+    const pill = pills[i];
+    pill.classList.remove('is-active');
+    void pill.offsetWidth; // restart the animation
+    pill.classList.add('is-active');
+    i = (i + 1) % pills.length;
+  }
+
+  new IntersectionObserver((entries) => {
+    if (entries[0].isIntersecting) {
+      if (!timer) { drop(); timer = setInterval(drop, 2200); }
+    } else {
+      clearInterval(timer);
+      timer = null;
+    }
+  }, { threshold: 0.3 }).observe(stage);
+})();
+
+// Nav: Products dropdown (click/tap toggle; hover and focus are handled in CSS)
+(function () {
+  const dd = document.querySelector('.nav-dropdown');
+  if (!dd) return;
+  const btn = dd.querySelector('.nav-dropdown-btn');
+  function setOpen(open) {
+    dd.classList.toggle('open', open);
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  btn.addEventListener('click', (e) => { e.stopPropagation(); setOpen(!dd.classList.contains('open')); });
+  document.addEventListener('click', (e) => { if (!dd.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+})();
+
+// Hero video: big play button first, native controls once playback starts
+(function () {
+  const video = document.getElementById('heroVideo');
+  const frame = document.getElementById('heroVideoFrame');
+  const playBtn = document.getElementById('heroVideoPlay');
+  if (!video || !frame || !playBtn) return;
+
+  function start() {
+    video.controls = true;
+    frame.classList.add('is-started');
+    video.play();
+  }
+  playBtn.addEventListener('click', start);
+  video.addEventListener('click', () => { if (!frame.classList.contains('is-started')) start(); });
+  video.addEventListener('ended', () => {
+    video.controls = false;
+    frame.classList.remove('is-started');
+  });
+})();

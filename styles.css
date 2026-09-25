@@ -3421,3 +3421,15 @@ body { background: var(--dark); color: var(--text-soft); }
 @media (min-width: 768px) {
   .video-page .systems-head .section-title { white-space: normal; }
 }
+
+/* hero: phone link under Get Started */
+.hero-cta-stack { flex-direction: column; gap: 18px; }
+.hero-phone {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.hero-phone strong { color: var(--gold); font-weight: 700; }
+.hero-phone:hover { color: var(--white); }
+.hero-phone:hover strong { text-decoration: underline; }

@@ -370,3 +370,113 @@ document.getElementById('contactForm')?.addEventListener('submit', (e) => {
     frame.classList.remove('is-started');
   });
 })();
+
+// Testimonial video cards: same big-play-button pattern as the hero video, one per card.
+// wireTestiPlayButton is reused below to wire up cards the carousel clones for its loop,
+// since cloneNode() copies markup but never copies event listeners.
+function wireTestiPlayButton(frame) {
+  const video = frame.querySelector('video');
+  const playBtn = frame.querySelector('button');
+  if (!video || !playBtn || frame.dataset.wired) return;
+  frame.dataset.wired = 'true';
+
+  function start() {
+    video.controls = true;
+    frame.classList.add('is-started');
+    video.play();
+  }
+  playBtn.addEventListener('click', start);
+  video.addEventListener('click', () => { if (!frame.classList.contains('is-started')) start(); });
+  video.addEventListener('ended', () => {
+    video.controls = false;
+    frame.classList.remove('is-started');
+  });
+}
+document.querySelectorAll('.testi-vcard-frame, .testi-hcard-media').forEach(wireTestiPlayButton);
+
+// Homepage testimonials carousel: shows 2 cards, always advances forward (never backward),
+// auto-advances every 3s, and loops seamlessly via cloned cards (same trick as the trades carousel).
+// Autoplay stays off the whole time any testimonial video is playing, even across two videos
+// or if the mouse leaves the carousel mid-playback, so it never scrolls out from under someone.
+(function () {
+  const track = document.getElementById('testiTrack');
+  const nextBtn = document.getElementById('testiNext');
+  if (!track || !nextBtn) return;
+
+  const origCards = Array.from(track.querySelectorAll('.testi-hcard'));
+  origCards.forEach((card) => {
+    const clone = card.cloneNode(true);
+    track.appendChild(clone);
+    const media = clone.querySelector('.testi-hcard-media');
+    // cloneNode() also copies the "already wired" marker, so clear it before re-wiring
+    if (media) { delete media.dataset.wired; wireTestiPlayButton(media); }
+  });
+  const origCount = origCards.length;
+
+  let current = 0;
+  let animating = false;
+  let timer = null;
+  let hovering = false;
+  const playingVideos = new Set();
+
+  function visible() { return window.innerWidth < 700 ? 1 : 2; }
+  function cardW() {
+    const gap = 32;
+    const v = visible();
+    return (track.parentElement.offsetWidth - gap * (v - 1)) / v + gap;
+  }
+  function moveTo(idx, animate) {
+    track.style.transition = animate ? 'transform 0.5s ease' : 'none';
+    track.style.transform = `translateX(${-idx * cardW()}px)`;
+  }
+  function next() {
+    if (animating) return;
+    animating = true;
+    current++;
+    moveTo(current, true);
+    if (current >= origCount) {
+      // silently rewind to the equivalent real position once the clone is fully in view
+      setTimeout(() => {
+        current -= origCount;
+        moveTo(current, false);
+        animating = false;
+      }, 520);
+    } else {
+      setTimeout(() => animating = false, 520);
+    }
+  }
+  function startTimer() {
+    stopTimer();
+    timer = setInterval(next, 3000);
+  }
+  function stopTimer() {
+    if (timer) clearInterval(timer);
+    timer = null;
+  }
+  // single source of truth: only autoplay when nothing is playing and the mouse isn't over it
+  function syncAutoplay() {
+    if (playingVideos.size > 0 || hovering) stopTimer();
+    else startTimer();
+  }
+
+  nextBtn.addEventListener('click', () => {
+    // don't leave a video quietly playing off-screen once we've scrolled past it
+    playingVideos.forEach((v) => v.pause());
+    next();
+  });
+  track.addEventListener('mouseenter', () => { hovering = true; syncAutoplay(); });
+  track.addEventListener('mouseleave', () => { hovering = false; syncAutoplay(); });
+
+  window.addEventListener('resize', () => moveTo(current, false));
+
+  moveTo(0, false);
+
+  // covers both the original cards and the clones appended above
+  track.querySelectorAll('video').forEach((v) => {
+    v.addEventListener('play', () => { playingVideos.add(v); syncAutoplay(); });
+    v.addEventListener('pause', () => { playingVideos.delete(v); syncAutoplay(); });
+    v.addEventListener('ended', () => { playingVideos.delete(v); syncAutoplay(); });
+  });
+
+  syncAutoplay();
+})();

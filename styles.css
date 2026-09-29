@@ -3433,3 +3433,224 @@ body { background: var(--dark); color: var(--text-soft); }
 .hero-phone strong { color: var(--gold); font-weight: 700; }
 .hero-phone:hover { color: var(--white); }
 .hero-phone:hover strong { text-decoration: underline; }
+
+/* ── Client testimonials page ── */
+.testi-page { padding: 150px 0 90px; border-top: none; }
+.testi-page-title {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  line-height: 1.25;
+  margin-bottom: 12px;
+}
+.testi-page-sub {
+  font-size: 1.05rem;
+  color: var(--gold);
+  margin-bottom: 56px;
+}
+.testi-vgrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  text-align: left;
+}
+.testi-vcard {
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.testi-vcard:hover { transform: translateY(-4px); border-color: rgba(251,185,23,0.35); }
+
+.testi-vcard-frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: #000;
+  overflow: hidden;
+}
+.testi-vcard-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+/* uncropped in fullscreen, no matter how it's cropped inline */
+.testi-vcard-video:fullscreen,
+.testi-vcard-video:-webkit-full-screen { object-fit: contain; }
+
+.testi-vcard-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(7,8,13,0.05) 45%, rgba(7,8,13,0.6) 100%);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.testi-vcard-frame.is-started::after { opacity: 0; }
+
+.testi-vcard-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  z-index: 2;
+  width: 64px; height: 64px;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #0b0b0a;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  box-shadow: 0 10px 32px rgba(251,185,23,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.25s ease;
+}
+.testi-vcard-play svg { width: 26px; height: 26px; margin-left: 3px; }
+.testi-vcard-play::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid rgba(251,185,23,0.5);
+  animation: heroPlayPulse 2.2s ease-out infinite;
+}
+.testi-vcard-play:hover { transform: translate(-50%, -50%) scale(1.08); box-shadow: 0 14px 40px rgba(251,185,23,0.55); }
+.testi-vcard-frame.is-started .testi-vcard-play { opacity: 0; pointer-events: none; }
+
+.testi-vcard-body { padding: 22px 24px 26px; }
+.testi-vcard .t-stars { color: var(--gold); margin-bottom: 14px; }
+.testi-vcard-quote { font-size: 0.92rem; line-height: 1.7; color: var(--text-soft); margin-bottom: 14px; }
+.testi-vcard-name { font-weight: 700; color: var(--white); }
+@media (max-width: 900px) {
+  .testi-page { padding-top: 120px; }
+  .testi-vgrid { grid-template-columns: 1fr; }
+}
+
+/* ── Testimonials carousel (homepage, above SEE OUR WORK) ── */
+.testi-carousel-section {
+  padding: 90px 0 70px;
+  background: var(--dark-alt);
+  text-align: center;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.testi-carousel-title {
+  margin-bottom: 12px;
+  color: var(--white);
+}
+.testi-carousel-sub {
+  font-size: 1.05rem;
+  color: var(--gold);
+  margin-bottom: 48px;
+}
+.testi-carousel {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.testi-carousel-viewport {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+.testi-carousel-track {
+  display: flex;
+  gap: 32px;
+  transition: transform 0.5s ease;
+}
+.testi-carousel-arrow {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 3rem;
+  color: var(--gold);
+  line-height: 1;
+  padding: 0 4px;
+  flex-shrink: 0;
+  transition: color 0.2s;
+  user-select: none;
+}
+.testi-carousel-arrow:hover { color: var(--gold-light); }
+.testi-carousel-cta { margin-top: 40px; }
+
+/* Compact horizontal testimonial card: small video left, quote right (homepage carousel) */
+.testi-carousel-track .testi-hcard {
+  flex: 0 0 calc((100% - 32px) / 2);
+  min-width: 0;
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  height: 190px;
+  background: var(--dark-card);
+  border: 1px solid var(--dark-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  text-align: left;
+}
+.testi-hcard-media {
+  position: relative;
+  flex: 0 0 180px;
+  background: #000;
+}
+.testi-hcard-video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+}
+.testi-hcard-video:fullscreen,
+.testi-hcard-video:-webkit-full-screen { object-fit: contain; }
+.testi-hcard-play {
+  position: absolute;
+  top: 50%; left: 50%;
+  z-index: 2;
+  width: 44px; height: 44px;
+  transform: translate(-50%, -50%);
+  display: flex; align-items: center; justify-content: center;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #0b0b0a;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  box-shadow: 0 6px 20px rgba(251,185,23,0.4);
+  transition: transform 0.2s ease, opacity 0.25s ease;
+}
+.testi-hcard-play svg { width: 18px; height: 18px; margin-left: 2px; }
+.testi-hcard-play:hover { transform: translate(-50%, -50%) scale(1.08); }
+.testi-hcard-media.is-started .testi-hcard-play { opacity: 0; pointer-events: none; }
+
+.testi-hcard-body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 18px;
+}
+.testi-hcard-body .t-stars { color: var(--gold); font-size: 0.85rem; margin-bottom: 8px; }
+.testi-hcard-quote {
+  flex: 1;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--text-soft);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+}
+.testi-hcard-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+}
+.testi-hcard-name { font-weight: 700; font-size: 0.85rem; color: var(--white); }
+.testi-hcard-more { font-size: 0.8rem; font-weight: 700; color: var(--gold); white-space: nowrap; }
+.testi-hcard-more:hover { color: var(--gold-light); }
+
+@media (max-width: 700px) {
+  .testi-carousel-track .testi-hcard { flex: 0 0 100%; height: auto; }
+  .testi-hcard-media { flex-basis: 140px; }
+  .testi-hcard-quote { -webkit-line-clamp: 6; }
+}

@@ -271,11 +271,11 @@ body {
 }
 
 .hero-title-gold {
-  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  font-size: clamp(0.85rem, calc(5vw - 2px), 3.3rem);
   font-weight: 800;
   line-height: 1.25;
   color: var(--gold);
-  max-width: 780px;
+  max-width: 980px;
   margin: 0 auto 8px;
   letter-spacing: -0.01em;
 }
@@ -668,10 +668,6 @@ body {
   .hero-left .hero-cta { justify-content: center; }
   .hero-dashboard-img { max-width: 320px; width: 90%; margin: 0 auto; display: block; }
   .hero-left .hero-trust { align-self: center; }
-}
-
-@media (max-width: 640px) {
-  .hero-title-break { display: none; }
 }
 
 @media (max-width: 500px) {

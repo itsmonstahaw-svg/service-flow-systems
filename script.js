@@ -351,48 +351,88 @@ document.getElementById('contactForm')?.addEventListener('submit', (e) => {
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
 })();
 
-// Hero video: big play button first, native controls once playback starts
-(function () {
-  const video = document.getElementById('heroVideo');
-  const frame = document.getElementById('heroVideoFrame');
-  const playBtn = document.getElementById('heroVideoPlay');
-  if (!video || !frame || !playBtn) return;
+// ── YouTube facade helpers ──
+// Every video on the site starts as a lightweight thumbnail (.yt-thumb) with our own
+// gold play button on top; the real YouTube embed is only created once someone clicks,
+// so no page load has to pull in YouTube's player for a video nobody plays.
+function buildYouTubeIframe(ytId, className, title) {
+  const iframe = document.createElement('iframe');
+  iframe.className = className;
+  iframe.src = `https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&playsinline=1`;
+  iframe.title = title || 'YouTube video player';
+  iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture');
+  iframe.setAttribute('allowfullscreen', '');
+  iframe.style.border = '0';
+  return iframe;
+}
 
-  function start() {
-    video.controls = true;
-    frame.classList.add('is-started');
-    video.play();
-  }
-  playBtn.addEventListener('click', start);
-  video.addEventListener('click', () => { if (!frame.classList.contains('is-started')) start(); });
-  video.addEventListener('ended', () => {
-    video.controls = false;
-    frame.classList.remove('is-started');
-  });
-})();
-
-// Testimonial video cards: same big-play-button pattern as the hero video, one per card.
-// wireTestiPlayButton is reused below to wire up cards the carousel clones for its loop,
-// since cloneNode() copies markup but never copies event listeners.
-function wireTestiPlayButton(frame) {
-  const video = frame.querySelector('video');
+// Simple version: swap the thumbnail for a plain embed. Used anywhere we don't need to know
+// when playback starts/stops (the hero video, and the testimonials.html page grid).
+function wireYouTubeFacade(frame) {
+  const thumb = frame.querySelector('.yt-thumb');
   const playBtn = frame.querySelector('button');
-  if (!video || !playBtn || frame.dataset.wired) return;
+  const ytId = frame.dataset.ytId;
+  if (!thumb || !playBtn || !ytId || frame.dataset.wired) return;
   frame.dataset.wired = 'true';
 
   function start() {
-    video.controls = true;
+    if (frame.classList.contains('is-started')) return;
     frame.classList.add('is-started');
-    video.play();
+    const iframe = buildYouTubeIframe(ytId, thumb.className.replace('yt-thumb', '').trim(), thumb.alt);
+    thumb.replaceWith(iframe);
   }
   playBtn.addEventListener('click', start);
-  video.addEventListener('click', () => { if (!frame.classList.contains('is-started')) start(); });
-  video.addEventListener('ended', () => {
-    video.controls = false;
-    frame.classList.remove('is-started');
-  });
+  thumb.addEventListener('click', start);
 }
-document.querySelectorAll('.testi-vcard-frame, .testi-hcard-media').forEach(wireTestiPlayButton);
+document.querySelectorAll('#heroVideoFrame, .testi-vcard-frame').forEach(wireYouTubeFacade);
+
+// Lazy-loads the YouTube IFrame API (only needed by the homepage carousel below, since that's
+// the only place that has to know play/pause state); resolves once window.YT.Player exists.
+let ytApiPromise = null;
+function loadYouTubeAPI() {
+  if (ytApiPromise) return ytApiPromise;
+  ytApiPromise = new Promise((resolve) => {
+    if (window.YT && window.YT.Player) { resolve(); return; }
+    const prevReady = window.onYouTubeIframeAPIReady;
+    window.onYouTubeIframeAPIReady = function () {
+      if (typeof prevReady === 'function') prevReady();
+      resolve();
+    };
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    document.head.appendChild(tag);
+  });
+  return ytApiPromise;
+}
+
+// Tracked version: same facade swap, but builds a real YT.Player so the carousel below can
+// hear PLAYING/PAUSED/ENDED and react (pause its own auto-scroll while someone's watching).
+function wireYouTubeFacadeTracked(frame, onStateChange) {
+  const thumb = frame.querySelector('.yt-thumb');
+  const playBtn = frame.querySelector('button');
+  const ytId = frame.dataset.ytId;
+  if (!thumb || !playBtn || !ytId || frame.dataset.wired) return;
+  frame.dataset.wired = 'true';
+
+  function start() {
+    if (frame.classList.contains('is-started')) return;
+    frame.classList.add('is-started');
+    const mount = document.createElement('div');
+    mount.className = thumb.className.replace('yt-thumb', '').trim();
+    thumb.replaceWith(mount);
+    loadYouTubeAPI().then(() => {
+      new YT.Player(mount, {
+        videoId: ytId,
+        playerVars: { autoplay: 1, rel: 0, playsinline: 1 },
+        events: {
+          onStateChange: (e) => { if (onStateChange) onStateChange(e); },
+        },
+      });
+    });
+  }
+  playBtn.addEventListener('click', start);
+  thumb.addEventListener('click', start);
+}
 
 // Homepage testimonials carousel: shows 2 cards, always advances forward (never backward),
 // auto-advances every 3s, and loops seamlessly via cloned cards (same trick as the trades carousel).
@@ -404,13 +444,7 @@ document.querySelectorAll('.testi-vcard-frame, .testi-hcard-media').forEach(wire
   if (!track || !nextBtn) return;
 
   const origCards = Array.from(track.querySelectorAll('.testi-hcard'));
-  origCards.forEach((card) => {
-    const clone = card.cloneNode(true);
-    track.appendChild(clone);
-    const media = clone.querySelector('.testi-hcard-media');
-    // cloneNode() also copies the "already wired" marker, so clear it before re-wiring
-    if (media) { delete media.dataset.wired; wireTestiPlayButton(media); }
-  });
+  origCards.forEach((card) => track.appendChild(card.cloneNode(true)));
   const origCount = origCards.length;
 
   let current = 0;
@@ -418,6 +452,7 @@ document.querySelectorAll('.testi-vcard-frame, .testi-hcard-media').forEach(wire
   let timer = null;
   let hovering = false;
   const playingVideos = new Set();
+  const players = new Set(); // every YT.Player created so far, for pausing on manual next
 
   function visible() { return window.innerWidth < 700 ? 1 : 2; }
   function cardW() {
@@ -459,9 +494,22 @@ document.querySelectorAll('.testi-vcard-frame, .testi-hcard-media').forEach(wire
     else startTimer();
   }
 
+  // covers both the original cards and the clones appended above
+  track.querySelectorAll('.testi-hcard-media').forEach((media) => {
+    wireYouTubeFacadeTracked(media, (e) => {
+      players.add(e.target);
+      if (e.data === YT.PlayerState.PLAYING) {
+        playingVideos.add(media);
+      } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+        playingVideos.delete(media);
+      }
+      syncAutoplay();
+    });
+  });
+
   nextBtn.addEventListener('click', () => {
     // don't leave a video quietly playing off-screen once we've scrolled past it
-    playingVideos.forEach((v) => v.pause());
+    players.forEach((p) => { try { p.pauseVideo(); } catch (err) {} });
     next();
   });
   track.addEventListener('mouseenter', () => { hovering = true; syncAutoplay(); });
@@ -470,13 +518,5 @@ document.querySelectorAll('.testi-vcard-frame, .testi-hcard-media').forEach(wire
   window.addEventListener('resize', () => moveTo(current, false));
 
   moveTo(0, false);
-
-  // covers both the original cards and the clones appended above
-  track.querySelectorAll('video').forEach((v) => {
-    v.addEventListener('play', () => { playingVideos.add(v); syncAutoplay(); });
-    v.addEventListener('pause', () => { playingVideos.delete(v); syncAutoplay(); });
-    v.addEventListener('ended', () => { playingVideos.delete(v); syncAutoplay(); });
-  });
-
   syncAutoplay();
 })();

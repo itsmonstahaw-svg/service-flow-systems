@@ -3650,3 +3650,6 @@ body { background: var(--dark); color: var(--text-soft); }
   .testi-hcard-media { flex-basis: 140px; }
   .testi-hcard-quote { -webkit-line-clamp: 6; }
 }
+
+/* hero without the price line: give the CTA room under the headline */
+.hero-title-gold + .hero-cta { margin-top: 28px; }

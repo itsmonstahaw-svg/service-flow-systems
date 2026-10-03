@@ -521,204 +521,76 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
   syncAutoplay();
 })();
 
-// VSL player (landing page): plays muted on a loop (from 1:30) as a preview until someone clicks;
-// the click restarts it from 0:00 with sound and switches on the full controls.
+// VSL (landing page): a muted 4-second GIF-style loop plays until someone clicks;
+// the click swaps in the YouTube video, which starts from 0:00 with sound.
 (function () {
   const root = document.getElementById('vsl');
   if (!root) return;
-  const $ = (id) => document.getElementById(id);
-  const frame = $('vslFrame');
-  const video = $('vslVideo');
-  const bigPlay = $('vslBigPlay');
-  const soundCta = $('vslSoundCta');
-  const toggle = $('vslToggle');
-  const muteBtn = $('vslMute');
-  const fsBtn = $('vslFs');
-  const progress = $('vslProgress');
-  const fill = $('vslFill');
-  const cur = $('vslCur');
-  const dur = $('vslDur');
-  const volSlider = $('vslVSlider');
-  const volTrack = $('vslVTrack');
-  const volFill = $('vslVFill');
-  const volThumb = $('vslVThumb');
-  const volPop = root.querySelector('.vsl-volpop');
-  const speedWrap = $('vslSpeed');
-  const gear = $('vslGear');
-  const speedCur = $('vslSpeedCur');
-  const speedItems = Array.from(root.querySelectorAll('.vsl-speed-item'));
+  const frame = document.getElementById('vslFrame');
+  const video = document.getElementById('vslVideo');
+  const bigPlay = document.getElementById('vslBigPlay');
+  const soundCta = document.getElementById('vslSoundCta');
+  const ytId = root.dataset.ytId;
 
-  const PREVIEW_START = 119; // the muted preview is a GIF-style loop that starts at 1:59...
+  const PREVIEW_START = 119; // the GIF-style loop starts at 1:59...
   const PREVIEW_LENGTH = 4;  // ...and repeats for 4 seconds (1:59 to 2:03)
   let started = false;
 
-  function fmt(t) {
-    if (!isFinite(t)) return '0:00';
-    const m = Math.floor(t / 60);
-    const s = Math.floor(t % 60);
-    return m + ':' + String(s).padStart(2, '0');
-  }
   function play() {
     const p = video.play();
     if (p && p.catch) p.catch(() => {});
   }
-  function syncState() {
-    root.classList.toggle('is-playing', !video.paused && !video.ended);
-    root.classList.toggle('is-muted', video.muted || video.volume === 0);
-  }
-  function syncVolume() {
-    const muted = video.muted || video.volume === 0;
-    const pct = muted ? 0 : Math.round(video.volume * 100);
-    volFill.style.height = pct + '%';
-    volThumb.style.bottom = pct + '%';
-    volSlider.setAttribute('aria-valuenow', String(pct));
-    muteBtn.title = muted ? 'Unmute' : 'Mute';
-    muteBtn.setAttribute('aria-label', muted ? 'Unmute' : 'Mute');
-  }
-  function syncToggleTitle() {
-    toggle.title = (!video.paused && !video.ended && started) ? 'Pause' : 'Play';
-  }
-  function paint() {
-    const d = video.duration || 0;
-    const pct = started && d ? (video.currentTime / d) * 100 : 0;
-    fill.style.width = pct + '%';
-    progress.setAttribute('aria-valuenow', String(Math.round(pct)));
-    if (started) cur.textContent = fmt(video.currentTime);
-  }
-  function loop() { paint(); if (started) requestAnimationFrame(loop); }
-
-  function setDuration() { dur.textContent = fmt(video.duration); }
   function enforcePreviewStart() {
     if (!started && isFinite(video.duration) && video.duration > PREVIEW_START + 10 &&
         video.currentTime < PREVIEW_START - 1) {
       video.currentTime = PREVIEW_START;
     }
   }
-  video.addEventListener('loadedmetadata', () => { setDuration(); enforcePreviewStart(); });
-  if (video.readyState >= 1) { setDuration(); enforcePreviewStart(); }
+  video.addEventListener('loadedmetadata', enforcePreviewStart);
+  if (video.readyState >= 1) enforcePreviewStart();
 
-  // GIF-style preview: jump back to the start of the 4-second clip as soon as it ends
-  setInterval(() => {
-    if (started || video.paused) return;
+  // jump back to the start of the 4-second clip as soon as it ends
+  const loopTimer = setInterval(() => {
+    if (started) { clearInterval(loopTimer); return; }
+    if (video.paused) return;
     if (video.currentTime >= PREVIEW_START + PREVIEW_LENGTH - 0.05 || video.currentTime < PREVIEW_START - 1) {
       video.currentTime = PREVIEW_START;
     }
   }, 40);
-
   // (safety net) if the file ever runs out, go back to the start of the clip
   video.addEventListener('ended', () => {
     if (!started) { video.currentTime = PREVIEW_START; play(); }
   });
 
-  ['play', 'pause', 'ended'].forEach((ev) => video.addEventListener(ev, () => { syncState(); syncToggleTitle(); }));
-  video.addEventListener('volumechange', () => { syncState(); syncVolume(); });
-  ['seeked', 'pause', 'ended', 'timeupdate'].forEach((ev) => video.addEventListener(ev, paint));
-  syncState(); syncVolume(); syncToggleTitle();
-
-  function setSpeed(rate) {
-    video.playbackRate = rate;
-    speedCur.textContent = rate + 'x';
-    speedItems.forEach((b) => b.classList.toggle('is-active', parseFloat(b.dataset.rate) === rate));
-  }
-
-  // first click: restart from the beginning, with sound, with real controls
+  // click: swap the loop for the YouTube player, from the beginning, with sound
   function start() {
+    if (started) return;
     started = true;
     root.classList.remove('is-preview');
-    root.classList.add('is-started');
-    video.muted = false;
-    video.volume = 1;
-    setSpeed(1);
-    video.currentTime = 0;
-    play();
-    syncState(); syncVolume(); syncToggleTitle();
-    requestAnimationFrame(loop);
-  }
-  function playPause() {
-    if (!started) { start(); return; }
-    if (video.paused || video.ended) {
-      if (video.ended) video.currentTime = 0;
-      play();
-    } else {
-      video.pause();
+    root.classList.add('is-loading');
+    video.pause();
+
+    const iframe = document.createElement('iframe');
+    iframe.className = 'vsl-yt';
+    iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0&playsinline=1&modestbranding=1';
+    iframe.title = 'Service Flow Systems video';
+    iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+    iframe.setAttribute('allowfullscreen', '');
+
+    let shown = false;
+    function show() {
+      if (shown) return;
+      shown = true;
+      root.classList.remove('is-loading');
+      root.classList.add('is-started');
+      video.removeAttribute('src'); // stop fetching the preview file
+      video.load();
     }
+    iframe.addEventListener('load', show);
+    setTimeout(show, 4000);
+    frame.appendChild(iframe);
   }
-
-  bigPlay.addEventListener('click', playPause);
-  soundCta.addEventListener('click', playPause);
-  toggle.addEventListener('click', playPause);
-  video.addEventListener('click', playPause);
-
-  muteBtn.addEventListener('click', () => {
-    if (!started) { start(); return; }
-    if (video.muted || video.volume === 0) {
-      video.muted = false;
-      if (video.volume === 0) video.volume = 1;
-    } else {
-      video.muted = true;
-    }
-  });
-
-  // volume slider (vertical, pops up over the speaker button)
-  let volDrag = false;
-  function volFrom(e) {
-    const r = volTrack.getBoundingClientRect();
-    if (!r.height) return;
-    const ratio = Math.min(Math.max(1 - (e.clientY - r.top) / r.height, 0), 1);
-    video.volume = ratio;
-    video.muted = ratio === 0;
-  }
-  volSlider.addEventListener('pointerdown', (e) => {
-    if (!started) return;
-    volDrag = true;
-    volPop.classList.add('is-dragging');
-    try { volSlider.setPointerCapture(e.pointerId); } catch (err) {}
-    volFrom(e);
-  });
-  volSlider.addEventListener('pointermove', (e) => { if (volDrag) volFrom(e); });
-  const endVolDrag = () => { volDrag = false; volPop.classList.remove('is-dragging'); };
-  volSlider.addEventListener('pointerup', endVolDrag);
-  volSlider.addEventListener('pointercancel', endVolDrag);
-
-  // playback speed menu
-  gear.addEventListener('click', () => {
-    if (!started) { start(); return; }
-    speedWrap.classList.toggle('is-open');
-  });
-  speedItems.forEach((b) => b.addEventListener('click', () => {
-    setSpeed(parseFloat(b.dataset.rate));
-    speedWrap.classList.remove('is-open');
-  }));
-  document.addEventListener('pointerdown', (e) => {
-    if (!speedWrap.contains(e.target)) speedWrap.classList.remove('is-open');
-  });
-
-  fsBtn.addEventListener('click', () => {
-    const inFs = document.fullscreenElement || document.webkitFullscreenElement;
-    if (inFs) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
-    const req = frame.requestFullscreen || frame.webkitRequestFullscreen;
-    if (req) req.call(frame);
-    else if (video.webkitEnterFullscreen) video.webkitEnterFullscreen(); // iPhone Safari
-  });
-
-  // click or drag on the progress bar to seek (only once the video has been started)
-  let seeking = false;
-  function seekFrom(e) {
-    const r = progress.getBoundingClientRect();
-    if (!r.width || !isFinite(video.duration)) return;
-    const x = Math.min(Math.max(e.clientX - r.left, 0), r.width);
-    video.currentTime = (x / r.width) * video.duration;
-    paint();
-  }
-  progress.addEventListener('pointerdown', (e) => {
-    if (!started) return;
-    seeking = true;
-    try { progress.setPointerCapture(e.pointerId); } catch (err) {}
-    seekFrom(e);
-  });
-  progress.addEventListener('pointermove', (e) => { if (seeking) seekFrom(e); });
-  progress.addEventListener('pointerup', () => { seeking = false; });
-  progress.addEventListener('pointercancel', () => { seeking = false; });
+  [video, bigPlay, soundCta].forEach((el) => el.addEventListener('click', start));
 
   // while it's still just a preview, only play it while it's on screen
   if ('IntersectionObserver' in window) {

@@ -66,10 +66,76 @@
 
         <!-- LEFT: Text -->
         <div class="hero-left">
+          <div class="section-label hero-eyebrow">For home service businesses</div>
           <h1 class="hero-title hero-title-gold">
-            Website Design & Marketing Systems<br class="hero-title-break" />
-            For Home Service Businesses
+            The system that runs your business<br class="hero-title-break" />
+            while you run the jobs.
           </h1>
+          <p class="hero-sub hero-sub--front">Website, missed-call text-back, lead follow-up, and 5★ Google reviews, all connected so no call, lead, or customer gets lost. Done for you.</p>
+          <p class="hero-price-line hero-price-line--vsl">$97/mo<span class="hero-price-hand" aria-hidden="true">👇</span></p>
+
+          <!-- VSL: muted 4-second loop preview (1:59-2:03) until clicked, then restarts at 0:00 with sound -->
+          <div class="vsl is-preview" id="vsl">
+            <div class="vsl-frame" id="vslFrame">
+              <video class="vsl-video" id="vslVideo" src="videos/vsl-dog-groomers.mp4#t=119" muted autoplay playsinline preload="metadata"></video>
+
+              <button type="button" class="vsl-soundcta" id="vslSoundCta" aria-label="Click for sound">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="vsl-wave vsl-wave1" d="M15 10a3 3 0 0 1 0 4"/><path class="vsl-wave vsl-wave2" d="M17.5 7.8a6 6 0 0 1 0 8.4"/><path class="vsl-wave vsl-wave3" d="M20 5.5a10 10 0 0 1 0 13"/></g></svg>
+                <span>Click for sound</span>
+              </button>
+
+              <button type="button" class="vsl-bigplay" id="vslBigPlay" aria-label="Play video with sound">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+              </button>
+
+              <div class="vsl-bar">
+                <button type="button" class="vsl-btn vsl-toggle" id="vslToggle" aria-label="Play or pause" title="Play">
+                  <svg class="vsl-i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
+                  <svg class="vsl-i-pause" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z" fill="currentColor"/></svg>
+                </button>
+                <span class="vsl-time"><span class="vsl-cur" id="vslCur">0:00</span><span class="vsl-sep"> / </span><span id="vslDur">0:00</span></span>
+                <div class="vsl-progress" id="vslProgress" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                  <div class="vsl-progress-fill" id="vslFill"></div>
+                </div>
+
+                <div class="vsl-vol" id="vslVol">
+                  <div class="vsl-volpop">
+                    <div class="vsl-vslider" id="vslVSlider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+                      <div class="vsl-vtrack" id="vslVTrack">
+                        <div class="vsl-vfill" id="vslVFill"></div>
+                        <div class="vsl-vthumb" id="vslVThumb"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <button type="button" class="vsl-btn vsl-mute" id="vslMute" aria-label="Unmute" title="Unmute">
+                    <svg class="vsl-i-vol" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                    <svg class="vsl-i-muted" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+                  </button>
+                </div>
+
+                <div class="vsl-speed" id="vslSpeed">
+                  <div class="vsl-speedmenu" id="vslSpeedMenu">
+                    <div class="vsl-speed-head"><span>Speed</span><span id="vslSpeedCur">1x</span></div>
+                    <button type="button" class="vsl-speed-item" data-rate="0.5"><span class="vsl-check">&#10003;</span>0.5x</button>
+                    <button type="button" class="vsl-speed-item" data-rate="0.75"><span class="vsl-check">&#10003;</span>0.75x</button>
+                    <button type="button" class="vsl-speed-item is-active" data-rate="1"><span class="vsl-check">&#10003;</span>1x</button>
+                    <button type="button" class="vsl-speed-item" data-rate="1.25"><span class="vsl-check">&#10003;</span>1.25x</button>
+                    <button type="button" class="vsl-speed-item" data-rate="1.5"><span class="vsl-check">&#10003;</span>1.5x</button>
+                    <button type="button" class="vsl-speed-item" data-rate="1.75"><span class="vsl-check">&#10003;</span>1.75x</button>
+                    <button type="button" class="vsl-speed-item" data-rate="2"><span class="vsl-check">&#10003;</span>2x</button>
+                  </div>
+                  <button type="button" class="vsl-btn vsl-gear" id="vslGear" aria-label="Playback speed" title="Speed">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.92-3.32a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+                  </button>
+                </div>
+
+                <button type="button" class="vsl-btn vsl-fs" id="vslFs" aria-label="Fullscreen" title="Fullscreen">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
           <div class="hero-cta hero-cta-stack">
             <a href="book-a-call.html" class="btn btn-gold btn-lg">Get Started →</a>
             <a href="tel:+15129313866" class="hero-phone">Prefer to talk? Call <strong>(512) 931-3866</strong></a>

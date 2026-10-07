@@ -386,6 +386,37 @@ function wireYouTubeFacade(frame) {
 }
 document.querySelectorAll('#heroVideoFrame, .testi-vcard-frame').forEach(wireYouTubeFacade);
 
+// Testimonial video that's a file on our own site (poster image + our play button, native controls
+// once playing). Returns the <video> so the carousel can pause it; onPlayingChange(true/false) lets
+// the carousel stop its auto-scroll while this one is playing.
+function wireLocalVideo(frame, onPlayingChange) {
+  const video = frame.querySelector('video');
+  const playBtn = frame.querySelector('button');
+  if (!video || !playBtn || frame.dataset.wired) return null;
+  frame.dataset.wired = 'true';
+
+  function start() {
+    video.muted = false;
+    video.controls = true;
+    frame.classList.add('is-started');
+    const p = video.play();
+    if (p && p.catch) p.catch(() => {});
+  }
+  playBtn.addEventListener('click', start);
+  video.addEventListener('click', () => { if (!frame.classList.contains('is-started')) start(); });
+  video.addEventListener('ended', () => {
+    video.controls = false;
+    frame.classList.remove('is-started');
+  });
+  if (onPlayingChange) {
+    video.addEventListener('play', () => onPlayingChange(true));
+    video.addEventListener('pause', () => onPlayingChange(false));
+    video.addEventListener('ended', () => onPlayingChange(false));
+  }
+  return video;
+}
+document.querySelectorAll('.testi-vcard-frame[data-local-video]').forEach((f) => wireLocalVideo(f));
+
 // Lazy-loads the YouTube IFrame API (only needed by the homepage carousel below, since that's
 // the only place that has to know play/pause state); resolves once window.YT.Player exists.
 let ytApiPromise = null;
@@ -453,6 +484,7 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
   let hovering = false;
   const playingVideos = new Set();
   const players = new Set(); // every YT.Player created so far, for pausing on manual next
+  const localVideos = new Set(); // file-based testimonial videos, also paused on manual next
 
   function visible() { return window.innerWidth < 700 ? 1 : 2; }
   function cardW() {
@@ -496,6 +528,15 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
 
   // covers both the original cards and the clones appended above
   track.querySelectorAll('.testi-hcard-media').forEach((media) => {
+    if (media.dataset.localVideo !== undefined) {
+      const v = wireLocalVideo(media, (isPlaying) => {
+        if (isPlaying) playingVideos.add(media);
+        else playingVideos.delete(media);
+        syncAutoplay();
+      });
+      if (v) localVideos.add(v);
+      return;
+    }
     wireYouTubeFacadeTracked(media, (e) => {
       players.add(e.target);
       if (e.data === YT.PlayerState.PLAYING) {
@@ -510,6 +551,7 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
   nextBtn.addEventListener('click', () => {
     // don't leave a video quietly playing off-screen once we've scrolled past it
     players.forEach((p) => { try { p.pauseVideo(); } catch (err) {} });
+    localVideos.forEach((v) => v.pause());
     next();
   });
   track.addEventListener('mouseenter', () => { hovering = true; syncAutoplay(); });

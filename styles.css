@@ -3689,6 +3689,7 @@ body { background: var(--dark); color: var(--text-soft); }
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+.vsl:not(.is-started) .vsl-yt { pointer-events: none; }
 .vsl.is-started .vsl-yt { opacity: 1; }
 
 /* "Click for sound" prompt, shown on the muted preview only */

@@ -604,32 +604,79 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
     if (!started) { video.currentTime = PREVIEW_START; play(); }
   });
 
-  // click: swap the loop for the embedded video player, from the beginning, with sound
+  // The Loom player is loaded quietly behind the preview as soon as the page has finished loading,
+  // so a single click can tell it to play right away (Loom speaks the Player.js message protocol).
+  // That keeps it to one click: no second press on Loom's own play button.
+  let loom = null;          // the <iframe>
+  let loomReady = false;    // Loom has announced it can take commands
+  let pendingPlay = false;  // clicked before it was ready
+  let revealed = false;
+  const loomOrigin = new URL(embedSrc, location.href).origin;
+
+  function loomSend(msg) {
+    if (!loom || !loom.contentWindow) return;
+    loom.contentWindow.postMessage(JSON.stringify(Object.assign({ context: 'player.js', version: '0.0.11' }, msg)), loomOrigin);
+  }
+  function reveal() {
+    if (revealed) return;
+    revealed = true;
+    root.classList.remove('is-loading');
+    root.classList.add('is-started');
+    video.removeAttribute('src'); // stop fetching the preview file
+    video.load();
+  }
+  function playLoom() {
+    loomSend({ method: 'play' });
+    // if the browser refused to start it with sound, fall back to starting it muted rather than
+    // leaving a dead click (the viewer can turn the sound on from Loom's own controls)
+    setTimeout(() => loomSend({ method: 'getPaused', listener: 'vslPaused' }), 900);
+  }
+  function createLoom() {
+    if (loom) return;
+    loom = document.createElement('iframe');
+    loom.className = 'vsl-yt';
+    loom.src = embedSrc;
+    loom.title = 'Service Flow Systems video';
+    loom.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
+    frame.appendChild(loom);
+  }
+  window.addEventListener('message', (e) => {
+    if (!loom || e.source !== loom.contentWindow) return;
+    let m = e.data;
+    try { if (typeof m === 'string') m = JSON.parse(m); } catch (err) { return; }
+    if (!m || m.context !== 'player.js') return;
+
+    if (m.event === 'ready') {
+      if (!loomReady) {
+        loomReady = true;
+        loomSend({ method: 'addEventListener', value: 'play' });
+      }
+      if (pendingPlay) { pendingPlay = false; playLoom(); }
+    } else if (m.event === 'play') {
+      reveal();
+    } else if (m.listener === 'vslPaused' && m.value === true && started) {
+      loomSend({ method: 'mute' });
+      loomSend({ method: 'play' });
+    }
+  });
+  // preload after the page has finished loading, so it never competes with the first paint
+  function preloadLoom() { setTimeout(createLoom, 600); }
+  if (document.readyState === 'complete') preloadLoom();
+  else window.addEventListener('load', preloadLoom);
+
+  // click: one click starts the Loom video from 0:00, with sound
   function start() {
     if (started) return;
     started = true;
     root.classList.remove('is-preview');
     root.classList.add('is-loading');
     video.pause();
-
-    const iframe = document.createElement('iframe');
-    iframe.className = 'vsl-yt';
-    iframe.src = embedSrc;
-    iframe.title = 'Service Flow Systems video';
-    iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
-
-    let shown = false;
-    function show() {
-      if (shown) return;
-      shown = true;
-      root.classList.remove('is-loading');
-      root.classList.add('is-started');
-      video.removeAttribute('src'); // stop fetching the preview file
-      video.load();
-    }
-    iframe.addEventListener('load', show);
-    setTimeout(show, 4000);
-    frame.appendChild(iframe);
+    createLoom();
+    if (loomReady) playLoom();
+    else pendingPlay = true;
+    // show the player as soon as it reports playing; if it never does, show it anyway so Loom's own
+    // controls are reachable
+    setTimeout(reveal, 3500);
   }
   [video, bigPlay, soundCta].forEach((el) => el.addEventListener('click', start));
 

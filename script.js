@@ -564,7 +564,7 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
 })();
 
 // VSL (landing page): a muted 4-second GIF-style loop plays until someone clicks;
-// the click swaps in the YouTube video, which starts from 0:00 with sound.
+// the click swaps in the Loom video, which starts from 0:00 with sound.
 (function () {
   const root = document.getElementById('vsl');
   if (!root) return;
@@ -572,7 +572,7 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
   const video = document.getElementById('vslVideo');
   const bigPlay = document.getElementById('vslBigPlay');
   const soundCta = document.getElementById('vslSoundCta');
-  const ytId = root.dataset.ytId;
+  const embedSrc = root.dataset.embedSrc;
 
   const PREVIEW_START = 119; // the GIF-style loop starts at 1:59...
   const PREVIEW_LENGTH = 4;  // ...and repeats for 4 seconds (1:59 to 2:03)
@@ -604,7 +604,7 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
     if (!started) { video.currentTime = PREVIEW_START; play(); }
   });
 
-  // click: swap the loop for the YouTube player, from the beginning, with sound
+  // click: swap the loop for the embedded video player, from the beginning, with sound
   function start() {
     if (started) return;
     started = true;
@@ -614,10 +614,9 @@ function wireYouTubeFacadeTracked(frame, onStateChange) {
 
     const iframe = document.createElement('iframe');
     iframe.className = 'vsl-yt';
-    iframe.src = 'https://www.youtube.com/embed/' + ytId + '?autoplay=1&rel=0&playsinline=1&modestbranding=1';
+    iframe.src = embedSrc;
     iframe.title = 'Service Flow Systems video';
     iframe.setAttribute('allow', 'autoplay; encrypted-media; picture-in-picture; fullscreen');
-    iframe.setAttribute('allowfullscreen', '');
 
     let shown = false;
     function show() {

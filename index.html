@@ -66,32 +66,73 @@
 
         <!-- LEFT: Text -->
         <div class="hero-left">
-          <div class="section-label hero-eyebrow">For home service businesses</div>
-          <h1 class="hero-title hero-title-gold">
-            The system that runs your business<br class="hero-title-break" />
-            while you run the jobs.
-          </h1>
-          <p class="hero-sub hero-sub--front">Website, missed-call text-back, lead follow-up, and 5★ Google reviews, all connected so no call, lead, or customer gets lost. Done for you.</p>
-          <p class="hero-price-line hero-price-line--vsl">$97/mo<span class="hero-price-hand" aria-hidden="true">👇</span></p>
+          <div class="hero-top">
+            <div class="hero-copy">
+              <div class="section-label hero-eyebrow">For home service businesses</div>
+              <h1 class="hero-title hero-title-gold hero-title-v2">
+                <span class="ht-line">More calls. More booked jobs.</span><br class="ht-br ht-br-1" />
+                <span class="ht-line">More 5★ reviews.</span><br class="ht-br ht-br-2" />
+                <span class="ht-line">Without lifting a finger.</span>
+              </h1>
+              <p class="hero-subhead">Booked jobs, not empty promises.</p>
+              <p class="hero-sub hero-sub--front">We help local service businesses get more calls, more 5-star reviews, and found first on Google. One done-for-you system.</p>
+              <ul class="hero-checks">
+                <li>Missed calls texted back instantly, so no lead goes cold</li>
+                <li>5-star reviews on autopilot</li>
+                <li>Show up higher in your service area on Google</li>
+              </ul>
+              <p class="hero-price-line hero-price-line--vsl"><span class="hp-price">$97/mo</span><span class="hp-dot" aria-hidden="true">&middot;</span><span class="hp-note">No contracts</span></p>
+              <a href="book-a-call.html" class="btn btn-gold btn-lg hero-copy-cta">Book a Free Strategy Call →</a>
+            </div>
 
-          <!-- VSL: muted 4-second GIF-style loop (1:59-2:03) until clicked, then the Loom video plays from 0:00 with sound -->
-          <div class="vsl is-preview" id="vsl" data-embed-src="https://www.loom.com/embed/cb45982baef54629a77c665a97834855?hide_owner=true&amp;hide_share=true&amp;hide_title=true&amp;hideEmbedTopBar=true">
-            <div class="vsl-frame" id="vslFrame">
-              <video class="vsl-video" id="vslVideo" src="videos/vsl-dog-groomers.mp4#t=119" muted autoplay playsinline preload="metadata"></video>
-
-              <button type="button" class="vsl-soundcta" id="vslSoundCta" aria-label="Click for sound">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9v6h4l5 5V4L7 9H3z" fill="currentColor"/><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path class="vsl-wave vsl-wave1" d="M15 10a3 3 0 0 1 0 4"/><path class="vsl-wave vsl-wave2" d="M17.5 7.8a6 6 0 0 1 0 8.4"/><path class="vsl-wave vsl-wave3" d="M20 5.5a10 10 0 0 1 0 13"/></g></svg>
-                <span>Click for sound</span>
-              </button>
-
-              <button type="button" class="vsl-bigplay" id="vslBigPlay" aria-label="Play video with sound">
-                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>
-              </button>
+            <!-- phone mockup: the system, shown as lock-screen notifications (new lead, 5-star review, job booked, new message) -->
+            <div class="hero-phone-mock" role="img" aria-label="Example phone notifications: a new lead, a 5-star review, a booked job and a new message">
+              <div class="phone">
+                <div class="phone-island"></div>
+                <div class="phone-screen">
+                  <div class="phone-time">9:41</div>
+                  <div class="phone-date" id="phoneDate">Today</div>
+                  <div class="phone-notifs">
+                    <div class="notif notif-1">
+                      <span class="notif-icon notif-icon--gray"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle cx="8.5" cy="7" r="4" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M20 8v6M23 11h-6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+                      <div class="notif-body">
+                        <div class="notif-top"><span class="notif-app">Service Flow</span><span class="notif-time">now</span></div>
+                        <div class="notif-title">New Lead Received</div>
+                        <div class="notif-text">John D. requested a quote.</div>
+                      </div>
+                    </div>
+                    <div class="notif notif-2">
+                      <span class="notif-icon notif-icon--gold"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z" fill="currentColor"/></svg></span>
+                      <div class="notif-body">
+                        <div class="notif-top"><span class="notif-app">Service Flow</span><span class="notif-time">2m ago</span></div>
+                        <div class="notif-title">New 5-Star Review</div>
+                        <div class="notif-text">"Best service ever! Highly..."</div>
+                      </div>
+                    </div>
+                    <div class="notif notif-3">
+                      <span class="notif-icon notif-icon--green"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                      <div class="notif-body">
+                        <div class="notif-top"><span class="notif-app">Service Flow</span><span class="notif-time">15m ago</span></div>
+                        <div class="notif-title">Job Booked</div>
+                        <div class="notif-text">Appointment set for tomorrow.</div>
+                      </div>
+                    </div>
+                    <div class="notif notif-4">
+                      <span class="notif-icon notif-icon--blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                      <div class="notif-body">
+                        <div class="notif-top"><span class="notif-app">Service Flow</span><span class="notif-time">1h ago</span></div>
+                        <div class="notif-title">New Message</div>
+                        <div class="notif-text">"Hey, are you available..."</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="phone-home"></div>
+                </div>
+              </div>
             </div>
           </div>
 
           <div class="hero-cta hero-cta-stack">
-            <a href="book-a-call.html" class="btn btn-gold btn-lg">Get Started →</a>
             <a href="tel:+15129313866" class="hero-phone">Prefer to talk? Call <strong>(512) 931-3866</strong></a>
           </div>
         </div>

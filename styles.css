@@ -3656,125 +3656,30 @@ body { background: var(--dark); color: var(--text-soft); }
 /* hero without the price line: give the CTA room under the headline */
 .hero-title-gold + .hero-cta { margin-top: 28px; }
 
-/* ── VSL (landing page): muted GIF-style loop until clicked, then the YouTube video plays ── */
-.vsl {
-  width: 100%;
-  max-width: 580px;
-  margin: 24px auto 32px;
-}
-.vsl-frame {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  background: #000;
-  border-radius: 16px;
-  overflow: hidden;
-  border: 1px solid var(--dark-border);
-  box-shadow: 0 20px 56px rgba(0,0,0,0.65), 0 0 60px rgba(251,185,23,0.1);
-  user-select: none;
-}
-.vsl-video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  background: #000;
-  cursor: pointer;
-}
-.vsl-yt {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.vsl:not(.is-started) .vsl-yt { pointer-events: none; }
-.vsl.is-started .vsl-yt { opacity: 1; }
-
-/* "Click for sound" prompt, shown on the muted preview only */
-.vsl-soundcta {
-  position: absolute;
-  top: 12px; right: 12px;
-  z-index: 3;
-  display: flex; align-items: center; gap: 8px;
-  padding: 8px 14px 8px 10px;
-  border: 1px solid rgba(255,255,255,0.16);
-  border-radius: 999px;
-  color: #fff;
-  background: rgba(0,0,0,0.62);
-  backdrop-filter: blur(6px);
-  font: inherit;
-  font-size: 0.8rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-.vsl-soundcta svg { width: 18px; height: 18px; flex-shrink: 0; }
-.vsl-soundcta:hover { background: rgba(251,185,23,0.92); border-color: transparent; color: #0b0b0a; }
-
-.vsl-bigplay {
-  position: absolute;
-  top: 50%; left: 50%;
-  z-index: 2;
-  width: 72px; height: 72px;
-  transform: translate(-50%, -50%);
-  display: flex; align-items: center; justify-content: center;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  color: #0b0b0a;
-  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
-  box-shadow: 0 10px 36px rgba(251,185,23,0.4);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.vsl-bigplay svg { width: 30px; height: 30px; margin-left: 3px; }
-.vsl-bigplay::before {
-  content: "";
-  position: absolute;
-  inset: -9px;
-  border-radius: 50%;
-  border: 2px solid rgba(251,185,23,0.5);
-  animation: heroPlayPulse 2.2s ease-out infinite;
-}
-.vsl-bigplay:hover { transform: translate(-50%, -50%) scale(1.07); box-shadow: 0 14px 44px rgba(251,185,23,0.55); }
-
-/* once the YouTube video is playing, the preview loop and its buttons go away */
-.vsl.is-started .vsl-video { display: none; }
-.vsl.is-loading .vsl-soundcta,
-.vsl.is-loading .vsl-bigplay,
-.vsl.is-started .vsl-soundcta,
-.vsl.is-started .vsl-bigplay { display: none; }
-
-@media (max-width: 600px) {
-  .vsl { margin: 20px auto 26px; }
-  .vsl-frame { border-radius: 12px; }
-  .vsl-bigplay { width: 56px; height: 56px; }
-  .vsl-bigplay svg { width: 24px; height: 24px; }
-  .vsl-soundcta { top: 8px; right: 8px; padding: 6px 11px 6px 8px; font-size: 0.72rem; }
-  .vsl-soundcta svg { width: 16px; height: 16px; }
-}
-@media (prefers-reduced-motion: reduce) { .vsl-bigplay::before { animation: none; } }
-
 /* price line sitting above the VSL */
 .hero-price-line--vsl { margin: 14px 0 0; text-align: center; }
 .hero-price-hand { margin-left: 0.25em; font-style: normal; }
 
 /* hero copy: eyebrow + headline + sub */
-/* plain letter-spaced eyebrow text (no pill) */
+/* eyebrow in a pill */
 .section-label.hero-eyebrow {
-  display: block;
-  padding: 0;
+  display: inline-block;
+  padding: 8px 18px;
   margin-bottom: 18px;
-  background: none;
-  border: 0;
-  border-radius: 0;
+  background: rgba(251,185,23,0.1);
+  border: 1px solid rgba(251,185,23,0.35);
+  border-radius: 100px;
   color: var(--gold);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   text-align: center;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+@media (max-width: 400px) {
+  .section-label.hero-eyebrow { padding: 7px 14px; font-size: 0.7rem; letter-spacing: 0.1em; }
 }
 .hero-sub--front {
   max-width: 620px;
@@ -3788,3 +3693,196 @@ body { background: var(--dark); color: var(--text-soft); }
 /* testimonial cards that have no quote/name yet: keep "See All" pinned to the bottom-right */
 .testi-hcard-foot { margin-top: auto; }
 .testi-hcard-more { margin-left: auto; }
+
+/* ── Hero: headline on the left, phone-notification mockup on the right ── */
+.hero-top {
+  width: 100%;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 44px;
+  align-items: center;
+  text-align: left;
+}
+.hero-copy { display: flex; flex-direction: column; align-items: flex-start; min-width: 0; }
+.hero-copy .section-label.hero-eyebrow { text-align: left; }
+.hero-copy .hero-title-gold { margin: 0 0 8px; text-align: left; max-width: none; }
+.hero-copy .hero-sub--front { margin: 14px 0 0; text-align: left; }
+.hero-copy .hero-price-line--vsl { margin: 20px 0 0; text-align: left; }
+
+/* everything in the phone is sized in em, so one font-size scales the whole mockup */
+.hero-phone-mock { position: relative; font-size: 15px; flex-shrink: 0; }
+.hero-phone-mock::before {
+  content: "";
+  position: absolute;
+  inset: 8% -22% 4% -22%;
+  background: radial-gradient(ellipse at 50% 55%, rgba(251,185,23,0.28) 0%, rgba(251,185,23,0) 68%);
+  filter: blur(26px);
+  pointer-events: none;
+}
+.phone {
+  position: relative;
+  width: 16.4em;
+  padding: 0.5em;
+  border-radius: 2.5em;
+  background: linear-gradient(160deg, #2a3045 0%, #151a29 100%);
+  box-shadow: 0 1.6em 3.6em rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.08);
+}
+.phone-island {
+  position: absolute;
+  top: 1.05em; left: 50%;
+  width: 5.2em; height: 1.45em;
+  transform: translateX(-50%);
+  border-radius: 1em;
+  background: #000;
+  z-index: 3;
+}
+.phone-screen {
+  position: relative;
+  overflow: hidden;
+  border-radius: 2em;
+  padding: 3em 0.6em 1.9em;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(251,185,23,0.16) 0%, rgba(251,185,23,0) 55%),
+    linear-gradient(180deg, #0f121c 0%, #05060a 100%);
+  color: #fff;
+  text-align: center;
+}
+.phone-time { font-size: 2.6em; font-weight: 200; line-height: 1; letter-spacing: -0.02em; }
+.phone-date { margin-top: 0.35em; font-size: 0.82em; font-weight: 600; color: rgba(255,255,255,0.78); }
+.phone-notifs { margin-top: 1.2em; display: flex; flex-direction: column; gap: 0.55em; text-align: left; }
+.phone-home {
+  position: absolute;
+  left: 50%; bottom: 0.65em;
+  width: 5em; height: 0.28em;
+  transform: translateX(-50%);
+  border-radius: 1em;
+  background: rgba(255,255,255,0.55);
+}
+
+.notif {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55em;
+  padding: 0.62em 0.62em;
+  border-radius: 1.1em;
+  background: rgba(238,238,243,0.93);
+  box-shadow: 0 0.2em 0.8em rgba(0,0,0,0.25);
+  color: #14161c;
+  opacity: 0;
+  animation: 9s ease infinite both;
+}
+.notif-1 { animation-name: notifIn1; }
+.notif-2 { animation-name: notifIn2; }
+.notif-3 { animation-name: notifIn3; }
+.notif-4 { animation-name: notifIn4; }
+.notif-icon {
+  flex-shrink: 0;
+  width: 2em; height: 2em;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 0.55em;
+}
+.notif-icon svg { width: 1.1em; height: 1.1em; }
+.notif-icon--red   { color: #d63a3a; background: rgba(214,58,58,0.14); }
+.notif-icon--blue  { color: #2f6fe4; background: rgba(47,111,228,0.14); }
+.notif-icon--green { color: #1fa05a; background: rgba(31,160,90,0.16); }
+.notif-icon--gold  { color: #e0a00c; background: rgba(251,185,23,0.2); }
+.notif-body { flex: 1; min-width: 0; }
+.notif-top { display: flex; justify-content: space-between; gap: 0.6em; }
+.notif-app { white-space: nowrap; font-size: 0.6em; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #6b7280; }
+.notif-time { font-size: 0.6em; font-weight: 500; color: #8a909c; white-space: nowrap; }
+.notif-title { margin-top: 0.1em; font-size: 0.78em; font-weight: 700; line-height: 1.25; }
+.notif-text { margin-top: 0.05em; font-size: 0.66em; line-height: 1.3; color: #565d6b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* one cycle: the four notifications arrive in order, hold, then clear together and start over */
+@keyframes notifIn1 { 0%, 3%  { opacity: 0; transform: translateY(1.1em) scale(0.96); } 8%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+@keyframes notifIn2 { 0%, 15% { opacity: 0; transform: translateY(1.1em) scale(0.96); } 20%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+@keyframes notifIn3 { 0%, 27% { opacity: 0; transform: translateY(1.1em) scale(0.96); } 32%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+@keyframes notifIn4 { 0%, 39% { opacity: 0; transform: translateY(1.1em) scale(0.96); } 44%, 88% { opacity: 1; transform: none; } 96%, 100% { opacity: 0; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .notif { animation: none; opacity: 1; } }
+
+/* tablets and phones: headline first (centered, as before), phone underneath, then the video */
+@media (max-width: 1000px) {
+  .hero-top { grid-template-columns: 1fr; gap: 26px; text-align: center; justify-items: center; }
+  .hero-copy { align-items: center; }
+  .hero-copy .section-label.hero-eyebrow,
+  .hero-copy .hero-title-gold,
+  .hero-copy .hero-sub--front,
+  .hero-copy .hero-price-line--vsl { text-align: center; }
+  .hero-copy .hero-title-gold { margin: 0 auto 8px; }
+  .hero-copy .hero-sub--front { margin: 14px auto 0; }
+}
+@media (max-width: 600px) {
+  .hero-phone-mock { font-size: 13px; }
+}
+
+.notif-icon--gray { color: #5d6472; background: rgba(93,100,114,0.16); }
+
+/* ── Hero copy: headline, subhead, benefits, price and button ── */
+/* headline: 2 lines on desktop/tablet (the 2nd break is hidden), 3 lines on phones */
+.hero-title .ht-br-2 { display: none; }
+.hero-title .ht-line { display: inline; }
+@media (max-width: 600px) {
+  .hero-title .ht-br-2 { display: inline; }
+}
+
+.hero-subhead {
+  margin: 18px 0 0;
+  font-size: clamp(1.05rem, 2.2vw, 1.3rem);
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--white);
+}
+.hero-copy .hero-sub--front { margin: 8px 0 0; }
+
+.hero-checks {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  text-align: left;
+}
+.hero-checks li {
+  position: relative;
+  padding-left: 1.7em;
+  font-size: clamp(0.92rem, 2vw, 1.02rem);
+  line-height: 1.45;
+  color: var(--text-soft);
+}
+.hero-checks li::before {
+  content: "\2713";
+  position: absolute;
+  left: 0; top: 0;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+/* price line: "$97/mo · No contracts" */
+.hero-copy .hero-price-line--vsl {
+  margin: 20px 0 0;
+  font-size: clamp(1.15rem, 2.6vw, 1.45rem);
+  font-style: normal;
+  font-weight: 800;
+  color: var(--white);
+}
+.hero-price-line--vsl .hp-price { color: var(--gold); }
+.hero-price-line--vsl .hp-dot { margin: 0 0.5em; color: rgba(255,255,255,0.4); }
+.hero-price-line--vsl .hp-note { font-weight: 600; color: var(--text-soft); }
+
+.hero-copy .hero-copy-cta { margin-top: 18px; }
+
+@media (max-width: 1000px) {
+  /* centered layout: the benefit list stays left-aligned as a block, centered on the page */
+  .hero-copy .hero-checks { align-self: center; }
+}
+
+/* new landing-page headline sizing, calibrated from measured line widths so it holds 2 lines
+   (desktop/tablet) or 3 short lines (phones) at every width */
+.hero-title-gold.hero-title-v2 { font-size: clamp(0.85rem, calc(4.78vw - 2.3px), 2.05rem); }
+@media (max-width: 600px) {
+  .hero-title-gold.hero-title-v2 { font-size: min(calc(6.56vw - 3.15px), 1.65rem); }
+}
+
+/* the call link now sits straight under the headline/phone row */
+.hero-top + .hero-cta { margin-top: 30px; }

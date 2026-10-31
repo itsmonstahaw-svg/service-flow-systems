@@ -3886,3 +3886,95 @@ body { background: var(--dark); color: var(--text-soft); }
 
 /* the call link now sits straight under the headline/phone row */
 .hero-top + .hero-cta { margin-top: 30px; }
+
+/* ── /video-explanation landing page ── */
+.vx-hero { padding: 130px 0 70px; text-align: center; }
+.vx-title {
+  max-width: 880px;
+  margin: 18px auto 34px;
+  font-size: clamp(1.7rem, 4.4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--white);
+}
+.vx-title .vx-gold { color: var(--gold); }
+
+.vx-player {
+  position: relative;
+  width: 100%;
+  max-width: 1040px;
+  margin: 0 auto;
+  aspect-ratio: 16 / 9;
+  background: #000;
+  border: 1px solid rgba(251,185,23,0.35);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.55), 0 0 60px rgba(251,185,23,0.12);
+}
+.vx-video { display: block; width: 100%; height: 100%; object-fit: contain; background: #000; cursor: pointer; }
+
+.vx-play {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border: none;
+  cursor: pointer;
+  color: var(--white);
+  background: linear-gradient(180deg, rgba(7,8,13,0.15), rgba(7,8,13,0.55));
+  transition: opacity 0.25s ease;
+}
+.vx-play-btn {
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+  width: clamp(76px, 11vw, 110px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  color: #0b0b0a;
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold), var(--gold-light));
+  box-shadow: 0 12px 40px rgba(251,185,23,0.45);
+  transition: transform 0.2s ease;
+}
+.vx-play-btn svg { width: 42%; height: 42%; margin-left: 5%; }
+.vx-play-btn::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: 50%;
+  border: 2px solid rgba(251,185,23,0.5);
+  animation: heroPlayPulse 2.2s ease-out infinite;
+}
+.vx-play:hover .vx-play-btn { transform: scale(1.08); }
+.vx-play-label { font-size: clamp(0.95rem, 2vw, 1.15rem); font-weight: 700; letter-spacing: 0.02em; text-shadow: 0 2px 12px rgba(0,0,0,0.6); }
+.vx-player.is-started .vx-play { opacity: 0; pointer-events: none; }
+
+.vx-cta { margin-top: 36px; }
+.vx-testis { padding: 70px 0 90px; background: var(--dark-alt); }
+@media (max-width: 600px) {
+  .vx-hero { padding: 104px 0 50px; }
+  .vx-title { margin-bottom: 24px; }
+  .vx-player { border-radius: 12px; }
+  .vx-cta { margin-top: 26px; }
+}
+
+/* /video-explanation on phones: testimonials sit side by side in a swipeable row (video on top, quote below) */
+@media (max-width: 900px) {
+  .vx-testis .testi-vgrid {
+    display: flex;
+    grid-template-columns: none;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 -16px;
+    padding: 4px 16px 18px;
+    scrollbar-width: none;
+  }
+  .vx-testis .testi-vgrid::-webkit-scrollbar { display: none; }
+  .vx-testis .testi-vcard { flex: 0 0 74%; max-width: 300px; scroll-snap-align: center; }
+  .vx-testis .testi-vcard:hover { transform: none; }
+}

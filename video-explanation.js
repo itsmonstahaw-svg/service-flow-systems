@@ -7,8 +7,9 @@
 //
 // Where it goes:
 //   - window.dataLayer (Google Tag Manager / GA4), gtag() and fbq() if those are on the page
-//   - an HTTP endpoint if #vxPlayer has data-analytics-endpoint="https://..." (e.g. a GoHighLevel
-//     inbound webhook, Zapier / Make hook, or a Google Apps Script URL that appends a Sheet row)
+//   - an HTTP endpoint if #vxPlayer has data-analytics-endpoint="https://..." (the Google Apps Script
+//     in tools/video-watch-sheet.gs logs one row per viewer to a Google Sheet; a GoHighLevel inbound
+//     webhook or Zapier / Make hook works too)
 (function () {
   const player = document.getElementById('vxPlayer');
   const video = document.getElementById('vxVideo');
@@ -21,19 +22,70 @@
     ? crypto.randomUUID()
     : Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
 
+  const unmuteBtn = document.getElementById('vxUnmute');
+  const PREVIEW_MS = 3000;   // how long the loading preview shows before the video starts itself
+
   // ── playback ──
+  // 1) the page loads with a short preview + spinner, then the video starts by itself, with sound
+  //    when the browser allows it (otherwise muted, and the first tap turns the sound on).
+  //    2) A click at any point starts it with sound, full screen.
+  let autoTimer = null;
+
+  function showMutedHint(on) { if (unmuteBtn) unmuteBtn.hidden = !on; }
+
+  function autoStart() {
+    autoTimer = null;
+    if (player.classList.contains('is-started')) return;
+    video.controls = true;
+    player.classList.add('is-started');
+
+    // try WITH sound first; browsers only allow that if the visitor has already interacted with the
+    // page / site. If it's refused, play muted instead and unmute on their first tap or key press.
+    video.muted = false;
+    const loud = video.play();
+    if (!loud || !loud.then) { showMutedHint(video.muted); return; }
+    loud.catch(() => {
+      video.muted = true;
+      const quiet = video.play();
+      if (quiet && quiet.then) {
+        quiet.then(() => { showMutedHint(true); unmuteOnFirstTouch(); }).catch(() => {
+          // even muted autoplay refused: fall back to a plain play button
+          video.controls = false;
+          player.classList.remove('is-started');
+          player.classList.add('is-blocked');
+        });
+      }
+    });
+  }
+
+  // the first real tap / click / key press anywhere on the page turns the sound on
+  function unmuteOnFirstTouch() {
+    const evs = ['pointerdown', 'keydown', 'touchend'];
+    function once() {
+      evs.forEach((e) => window.removeEventListener(e, once, true));
+      if (video.muted && !video.paused) { video.muted = false; showMutedHint(false); }
+    }
+    evs.forEach((e) => window.addEventListener(e, once, true));
+  }
+
+  // a click (play button, preview, or the video itself): play with sound and go full screen
   function start() {
+    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
     video.muted = false;
     video.controls = true;
     player.classList.add('is-started');
-    const p = video.play();
-    if (p && p.catch) p.catch(() => {});
+    player.classList.remove('is-blocked');
+    showMutedHint(false);
+    if (video.paused) {
+      const p = video.play();
+      if (p && p.catch) p.catch(() => {});
+    }
     goFullscreen();
   }
 
-  // Clicking the big screen opens it full screen. Must run inside the click, so start() calls it
-  // directly. The <video> itself goes full screen so its native controls (and exit button) come along;
-  // iPhones only allow this through webkitEnterFullscreen.
+  // Must run inside the click, so start() calls it directly. The <video> itself goes full screen so
+  // its native controls (and exit button) come along; iPhones only allow this through
+  // webkitEnterFullscreen.
   function goFullscreen() {
     try {
       if (document.fullscreenElement || document.webkitFullscreenElement) return;
@@ -47,13 +99,45 @@
       }
     } catch (e) { /* fullscreen is a nicety, never block playback */ }
   }
+
   playBtn.addEventListener('click', start);
-  video.addEventListener('click', () => { if (!player.classList.contains('is-started')) start(); });
+  if (unmuteBtn) unmuteBtn.addEventListener('click', start);
+  video.addEventListener('click', () => {
+    if (!player.classList.contains('is-started') || video.muted) start();
+  });
+  video.addEventListener('volumechange', () => { if (!video.muted) showMutedHint(false); });
   video.addEventListener('ended', () => {
     video.controls = false;
     player.classList.remove('is-started');
+    player.classList.add('is-blocked');   // back to the poster with a play button for a replay
+    showMutedHint(false);
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
   });
+
+  autoTimer = setTimeout(autoStart, PREVIEW_MS);
+
+  // ── skipped section ──
+  // Optional: data-skip-from / data-skip-to (seconds) on #vxPlayer make the player jump over a part
+  // of the video. On /video-explanation that's the "Is your customer list safe? Yes. We never share
+  // it..." part (83.07s to 88.45s), whose two ends sit in silence, before its on-screen text and
+  // captions. Pages without those attributes play the whole video.
+  const SKIP_FROM = parseFloat(player.dataset.skipFrom);
+  const SKIP_TO = parseFloat(player.dataset.skipTo);
+  const HAS_SKIP = isFinite(SKIP_FROM) && isFinite(SKIP_TO) && SKIP_TO > SKIP_FROM;
+  const SKIP_LEN = HAS_SKIP ? SKIP_TO - SKIP_FROM : 0;
+
+  function skipCheck() {
+    const t = video.currentTime;
+    if (HAS_SKIP && t >= SKIP_FROM && t < SKIP_TO) video.currentTime = SKIP_TO;
+  }
+  // timeupdate only fires ~4x a second, so while playing check every frame instead
+  let skipRaf = 0;
+  function skipLoop() {
+    skipCheck();
+    skipRaf = video.paused ? 0 : requestAnimationFrame(skipLoop);
+  }
+  video.addEventListener('play', () => { if (!skipRaf) skipRaf = requestAnimationFrame(skipLoop); });
+  video.addEventListener('seeked', skipCheck);   // scrubbing into the skipped part lands after it
 
   // ── tracking state ──
   let startedAt = null;      // Date of the first play
@@ -66,7 +150,7 @@
   const milestonesHit = {};
 
   function snapshot(event) {
-    const dur = video.duration && isFinite(video.duration) ? video.duration : 0;
+    const dur = video.duration && isFinite(video.duration) ? video.duration - SKIP_LEN : 0;   // length viewers actually get
     const iso = startedAt ? startedAt.toISOString() : null;
     return {
       event: event,
@@ -84,7 +168,9 @@
       percent_watched: dur ? Math.min(100, Math.round((watched / dur) * 100)) : 0,
       percent_reached: dur ? Math.min(100, Math.round((maxPos / dur) * 100)) : 0,
       completed: completed,
-      plays: plays
+      plays: plays,
+      device: window.matchMedia('(pointer: coarse)').matches ? 'mobile' : 'desktop',
+      user_agent: navigator.userAgent
     };
   }
 
@@ -146,10 +232,11 @@
       if (d > 0 && d < 1.5) watched += d;
     }
     lastTime = t;
-    if (t > maxPos) maxPos = t;
+    const pos = !HAS_SKIP ? t : (t >= SKIP_TO ? t - SKIP_LEN : Math.min(t, SKIP_FROM));   // position without the skipped part
+    if (pos > maxPos) maxPos = pos;
 
-    const dur = video.duration;
-    if (dur && isFinite(dur)) {
+    const dur = video.duration - SKIP_LEN;
+    if (dur > 0 && isFinite(dur)) {
       [25, 50, 75].forEach((m) => {
         if (!milestonesHit[m] && watched / dur >= m / 100) {
           milestonesHit[m] = true;
@@ -163,7 +250,7 @@
   video.addEventListener('pause', () => { if (!video.ended) flush('video_pause'); });
   video.addEventListener('ended', () => {
     completed = true;
-    if (video.duration && isFinite(video.duration)) maxPos = video.duration;
+    if (video.duration && isFinite(video.duration)) maxPos = video.duration - SKIP_LEN;
     report('video_complete');
   });
 

@@ -1,4 +1,4 @@
-// /video-explanation: click-to-play explainer video + view analytics.
+// /video-explanation: tap-to-play explainer video (with sound) + view analytics.
 //
 // For every visit that presses play we record: when they started (date + time), how many seconds
 // they actually watched (time spent playing, so skipping around doesn't inflate it), how far in they
@@ -38,62 +38,14 @@
     first_name: pick('n', 'name')
   };
 
-  const unmuteBtn = document.getElementById('vxUnmute');
-  const PREVIEW_MS = 3000;   // how long the loading preview shows before the video starts itself
-
   // ── playback ──
-  // 1) the page loads with a short preview + spinner, then the video starts by itself, with sound
-  //    when the browser allows it (otherwise muted, and the first tap turns the sound on).
-  //    2) A click at any point starts it with sound, full screen.
-  let autoTimer = null;
-
-  function showMutedHint(on) { if (unmuteBtn) unmuteBtn.hidden = !on; }
-
-  function autoStart() {
-    autoTimer = null;
-    if (player.classList.contains('is-started')) return;
-    video.controls = true;
-    player.classList.add('is-started');
-
-    // try WITH sound first; browsers only allow that if the visitor has already interacted with the
-    // page / site. If it's refused, play muted instead and unmute on their first tap or key press.
-    video.muted = false;
-    const loud = video.play();
-    if (!loud || !loud.then) { showMutedHint(video.muted); return; }
-    loud.catch(() => {
-      video.muted = true;
-      const quiet = video.play();
-      if (quiet && quiet.then) {
-        quiet.then(() => { showMutedHint(true); unmuteOnFirstTouch(); }).catch(() => {
-          // even muted autoplay refused: fall back to a plain play button
-          video.controls = false;
-          player.classList.remove('is-started');
-          player.classList.add('is-blocked');
-        });
-      }
-    });
-  }
-
-  // the first real tap / click / key press anywhere on the page turns the sound on
-  function unmuteOnFirstTouch() {
-    const evs = ['pointerdown', 'keydown', 'touchend'];
-    function once() {
-      evs.forEach((e) => window.removeEventListener(e, once, true));
-      if (video.muted && !video.paused) { video.muted = false; showMutedHint(false); }
-    }
-    evs.forEach((e) => window.addEventListener(e, once, true));
-  }
-
+  // The page shows the looping preview with a play icon and "Tap to hear". Browsers only allow sound
+  // after a tap, so the video starts on that tap, with sound, full screen.
   // a click (play button, preview, or the video itself): play with sound and go full screen
   function start() {
-    if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
-    // they only tapped to get sound: start over so the opening isn't missed
-    if (video.muted && video.currentTime < 20) video.currentTime = 0;
     video.muted = false;
     video.controls = true;
     player.classList.add('is-started');
-    player.classList.remove('is-blocked');
-    showMutedHint(false);
     if (video.paused) {
       const p = video.play();
       if (p && p.catch) p.catch(() => {});
@@ -119,20 +71,14 @@
   }
 
   playBtn.addEventListener('click', start);
-  if (unmuteBtn) unmuteBtn.addEventListener('click', start);
   video.addEventListener('click', () => {
     if (!player.classList.contains('is-started') || video.muted) start();
   });
-  video.addEventListener('volumechange', () => { if (!video.muted) showMutedHint(false); });
   video.addEventListener('ended', () => {
     video.controls = false;
-    player.classList.remove('is-started');
-    player.classList.add('is-blocked');   // back to the poster with a play button for a replay
-    showMutedHint(false);
+    player.classList.remove('is-started');   // back to the preview with the play button for a replay
     if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(() => {});
   });
-
-  autoTimer = setTimeout(autoStart, PREVIEW_MS);
 
   // ── skipped section ──
   // Optional: data-skip-from / data-skip-to (seconds) on #vxPlayer make the player jump over a part

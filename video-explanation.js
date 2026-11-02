@@ -87,6 +87,8 @@
   // a click (play button, preview, or the video itself): play with sound and go full screen
   function start() {
     if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+    // they only tapped to get sound: start over so the opening isn't missed
+    if (video.muted && video.currentTime < 20) video.currentTime = 0;
     video.muted = false;
     video.controls = true;
     player.classList.add('is-started');

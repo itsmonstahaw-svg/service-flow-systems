@@ -3965,21 +3965,33 @@ body { background: var(--dark); color: var(--text-soft); }
 .vx-player.is-blocked .vx-play-btn { display: flex; }
 .vx-player.is-started .vx-play { opacity: 0; pointer-events: none; }
 
+/* browsers won't start sound without a tap, so when the video falls back to muted this is a big, pulsing,
+   centred "Tap to hear" button that's impossible to miss */
 .vx-unmute {
   position: absolute;
   z-index: 3;
-  top: 14px; left: 14px;
-  padding: 8px 14px;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 34px;
   border: none;
   border-radius: 999px;
-  font: 700 0.85rem/1 inherit;
+  font: 800 1.35rem/1 inherit;
   font-family: inherit;
   color: #0b0b0a;
   background: var(--gold);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.45);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.55), 0 0 0 0 rgba(251,185,23,0.7);
   cursor: pointer;
+  animation: vx-unmute-pulse 1.6s ease-out infinite;
 }
 .vx-unmute[hidden] { display: none; }
+@keyframes vx-unmute-pulse {
+  0%   { box-shadow: 0 10px 40px rgba(0,0,0,0.55), 0 0 0 0 rgba(251,185,23,0.7); }
+  70%  { box-shadow: 0 10px 40px rgba(0,0,0,0.55), 0 0 0 26px rgba(251,185,23,0); }
+  100% { box-shadow: 0 10px 40px rgba(0,0,0,0.55), 0 0 0 0 rgba(251,185,23,0); }
+}
+@media (max-width: 600px) {
+  .vx-unmute { padding: 16px 26px; font-size: 1.1rem; }
+}
 
 .vx-testis { padding: 70px 0 90px; background: var(--dark-alt); }
 @media (max-width: 600px) {

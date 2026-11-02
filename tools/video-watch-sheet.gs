@@ -1,3 +1,4 @@
+/** @OnlyCurrentDoc */
 /**
  * Service Flow Systems: collects /video-explanation watch data into a Google Sheet.
  *
@@ -23,6 +24,14 @@ var HEADERS = [
   'plays', 'last_event', 'last_update', 'device', 'page', 'video_id', 'referrer', 'user_agent'
 ];
 var SUMMARY_SHEET = 'By Business';
+
+// GoHighLevel tagging: when a contact (link sent with ?c=<contact id>) passes 25 / 50 / 75 / 100% watched,
+// they get the tags below, so a workflow can trigger on "Tag added". Needs one Script property
+// (Project Settings > Script properties): GHL_TOKEN, a Private Integration token with the
+// contacts.write scope. Without GHL_TOKEN the sheet logging works as before and nothing is tagged.
+// Column W of the Watches sheet remembers the highest milestone already tagged for that view.
+var GHL_MILESTONES = [[25, 'video-watched-25'], [50, 'video-watched-50'], [75, 'video-watched-75'], [100, 'video-watched-100']];
+var GHL_COL = HEADERS.length + 1;
 
 function doPost(e) {
   var lock = LockService.getScriptLock();
@@ -68,12 +77,49 @@ function doPost(e) {
       d.event, new Date(), d.device, d.page, d.video_id || '', d.referrer, d.user_agent
     ];
     if (row) sh.getRange(row, 1, 1, line.length).setValues([line]);
-    else sh.appendRow(line);
+    else { sh.appendRow(line); row = sh.getLastRow(); }
+
+    tagMilestones_(sh, row, d);
     return out_('ok');
   } catch (err) {
     return out_('error: ' + err);
   } finally {
     lock.releaseLock();
+  }
+}
+
+// adds the milestone tags in GoHighLevel the first time a contact passes each one
+function tagMilestones_(sh, row, d) {
+  try {
+    var token = PropertiesService.getScriptProperties().getProperty('GHL_TOKEN');
+    var contact = String(d.contact_id || '');
+    if (!token || !/^[A-Za-z0-9]{10,40}$/.test(contact)) return;
+
+    var pct = d.completed ? 100 : Number(d.percent_watched) || 0;
+    var done = Number(sh.getRange(row, GHL_COL).getValue()) || 0;
+    var tags = [];
+    var reached = done;
+    GHL_MILESTONES.forEach(function (m) {
+      if (pct >= m[0] && m[0] > done) { tags.push(m[1]); reached = m[0]; }
+    });
+    if (!tags.length) return;
+
+    var res = UrlFetchApp.fetch('https://services.leadconnectorhq.com/contacts/' + contact + '/tags', {
+      method: 'post',
+      contentType: 'application/json',
+      headers: { Authorization: 'Bearer ' + token, Version: '2021-07-28' },
+      payload: JSON.stringify({ tags: tags }),
+      muteHttpExceptions: true
+    });
+    var code = res.getResponseCode();
+    if (code >= 200 && code < 300) {
+      if (sh.getRange(1, GHL_COL).getValue() !== 'ghl_milestone') sh.getRange(1, GHL_COL).setValue('ghl_milestone').setFontWeight('bold');
+      sh.getRange(row, GHL_COL).setValue(reached);   // only recorded on success, so a failed call retries on the next update
+    } else {
+      console.error('GHL tag failed ' + code + ': ' + res.getContentText());
+    }
+  } catch (err) {
+    console.error('GHL tag error: ' + err);
   }
 }
 

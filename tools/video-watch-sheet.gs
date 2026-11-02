@@ -25,12 +25,14 @@ var HEADERS = [
 ];
 var SUMMARY_SHEET = 'By Business';
 
-// GoHighLevel tagging: when a contact (link sent with ?c=<contact id>) passes 25 / 50 / 75 / 100% watched,
-// they get the tags below, so a workflow can trigger on "Tag added". Needs one Script property
-// (Project Settings > Script properties): GHL_TOKEN, a Private Integration token with the
-// contacts.write scope. Without GHL_TOKEN the sheet logging works as before and nothing is tagged.
+// GoHighLevel tagging: when a contact (link sent with ?c=<contact id>) opens the video they get
+// 'video-opened', and as they pass 10 / 25 / 50 / 75 / 100% watched they get the tags below, so a workflow
+// can trigger on "Tag added". Needs one Script property (Project Settings > Script properties):
+// GHL_TOKEN, a Private Integration token with the contacts.write scope. Without GHL_TOKEN the sheet
+// logging works as before and nothing is tagged.
 // Column W of the Watches sheet remembers the highest milestone already tagged for that view.
-var GHL_MILESTONES = [[25, 'video-watched-25'], [50, 'video-watched-50'], [75, 'video-watched-75'], [100, 'video-watched-100']];
+var GHL_OPENED_TAG = 'video-opened';
+var GHL_MILESTONES = [[10, 'video-watched-10'], [25, 'video-watched-25'], [50, 'video-watched-50'], [75, 'video-watched-75'], [100, 'video-watched-100']];
 var GHL_COL = HEADERS.length + 1;
 
 function doPost(e) {
@@ -76,10 +78,11 @@ function doPost(e) {
       d.furthest_second, d.percent_reached, d.video_length, d.completed ? 'yes' : 'no', d.plays,
       d.event, new Date(), d.device, d.page, d.video_id || '', d.referrer, d.user_agent
     ];
+    var isNew = !row;
     if (row) sh.getRange(row, 1, 1, line.length).setValues([line]);
     else { sh.appendRow(line); row = sh.getLastRow(); }
 
-    tagMilestones_(sh, row, d);
+    tagMilestones_(sh, row, d, isNew);
     return out_('ok');
   } catch (err) {
     return out_('error: ' + err);
@@ -88,8 +91,8 @@ function doPost(e) {
   }
 }
 
-// adds the milestone tags in GoHighLevel the first time a contact passes each one
-function tagMilestones_(sh, row, d) {
+// adds the opened + milestone tags in GoHighLevel the first time a contact reaches each one
+function tagMilestones_(sh, row, d, isNew) {
   try {
     var token = PropertiesService.getScriptProperties().getProperty('GHL_TOKEN');
     var contact = String(d.contact_id || '');
@@ -97,7 +100,7 @@ function tagMilestones_(sh, row, d) {
 
     var pct = d.completed ? 100 : Number(d.percent_watched) || 0;
     var done = Number(sh.getRange(row, GHL_COL).getValue()) || 0;
-    var tags = [];
+    var tags = isNew ? [GHL_OPENED_TAG] : [];
     var reached = done;
     GHL_MILESTONES.forEach(function (m) {
       if (pct >= m[0] && m[0] > done) { tags.push(m[1]); reached = m[0]; }

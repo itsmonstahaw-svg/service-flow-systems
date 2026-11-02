@@ -22,6 +22,22 @@
     ? crypto.randomUUID()
     : Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
 
+  // who the link was sent to: ?c=<contact id>&b=<business name>&n=<first name>, filled in by the
+  // GoHighLevel merge fields in the message. A value that still contains "{{" never got merged, so it's dropped.
+  const qs = new URLSearchParams(location.search);
+  const pick = (...keys) => {
+    for (const k of keys) {
+      const v = (qs.get(k) || '').trim();
+      if (v && v.indexOf('{{') === -1) return v.slice(0, 120);
+    }
+    return '';
+  };
+  const who = {
+    contact_id: pick('c', 'cid', 'contact_id'),
+    business_name: pick('b', 'business'),
+    first_name: pick('n', 'name')
+  };
+
   const unmuteBtn = document.getElementById('vxUnmute');
   const PREVIEW_MS = 3000;   // how long the loading preview shows before the video starts itself
 
@@ -156,6 +172,9 @@
       event: event,
       video_id: videoId,
       view_id: viewId,
+      contact_id: who.contact_id,                        // who watched, when the link carries ?c= ?b= ?n=
+      business_name: who.business_name,
+      first_name: who.first_name,
       page: location.pathname,
       referrer: document.referrer || '',
       started_at: iso,                                   // ISO timestamp (UTC)
@@ -253,6 +272,14 @@
     if (video.duration && isFinite(video.duration)) maxPos = video.duration - SKIP_LEN;
     report('video_complete');
   });
+
+  // save the running total every 15 s while it plays, so the watch time is still accurate (within 15 s)
+  // when a phone browser is killed without ever firing pause / pagehide
+  let beat = null;
+  video.addEventListener('playing', () => { if (!beat) beat = setInterval(() => flush('video_watch'), 15000); });
+  const stopBeat = () => { if (beat) { clearInterval(beat); beat = null; } };
+  video.addEventListener('pause', stopBeat);
+  video.addEventListener('ended', stopBeat);
 
   // leaving the page / switching tabs: send whatever has been watched so far
   document.addEventListener('visibilitychange', () => {

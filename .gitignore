@@ -1,1 +1,5 @@
 
+node_modules
+.env
+.claude/settings.local.json
+/images/Video Project 148.mp4
